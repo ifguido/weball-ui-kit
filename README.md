@@ -101,6 +101,44 @@ function App() {
 }
 ```
 
+### Modo de Edición
+
+El componente incluye un prop `editMode` que controla si los usuarios pueden editar los resultados de los partidos:
+
+```jsx
+import { WbFixture, WeballUIProvider } from 'weball-ui-kit';
+
+function App() {
+  const handleResultSaved = (fixtureId, scoreHome, scoreAway) => {
+    console.log('Resultado guardado:', { fixtureId, scoreHome, scoreAway });
+    // Aquí puedes actualizar tu estado o enviar a una API
+  };
+
+  return (
+    <WeballUIProvider>
+      {/* Modo solo lectura (por defecto) */}
+      <WbFixture 
+        fixtureVisualizerRoot={fixtureData} 
+        editMode={false}
+      />
+      
+      {/* Modo de edición habilitado */}
+      <WbFixture 
+        fixtureVisualizerRoot={fixtureData} 
+        editMode={true}
+        onResultSaved={handleResultSaved}
+      />
+    </WeballUIProvider>
+  );
+}
+```
+
+**Características del modo de edición:**
+- `editMode={false}` (por defecto): Solo visualización, no se pueden editar resultados
+- `editMode={true}`: Permite hacer clic en los marcadores para editarlos
+- Cuando está habilitado, aparece un cursor pointer y efectos hover en los resultados
+- Se abre un modal para editar el marcador cuando se hace clic en un resultado
+
 ### Uso con Props Personalizadas
 
 ```jsx

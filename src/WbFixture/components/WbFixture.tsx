@@ -320,6 +320,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
             nodeSelected={props.nodeSelected?.id === node.id}
             onClickMatch={props.onClickNode ?? (() => { })}
             onResultSaved={props.onResultSaved ?? (() => { })}
+            editMode={props.editMode}
           />
         </Box>
       ))}

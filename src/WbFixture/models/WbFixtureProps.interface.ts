@@ -101,4 +101,12 @@ export interface WbFixtureProps<
    * The stage number to start viewing from
    */
   viewFromStage?: number;
+  
+  /**
+   * Enable or disable edit mode for results
+   * When true, allows clicking on scores to edit them
+   * When false, score editing is disabled (view-only mode)
+   * @default false
+   */
+  editMode?: boolean;
 }

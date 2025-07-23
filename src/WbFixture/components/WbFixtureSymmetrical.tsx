@@ -386,7 +386,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
             width={FIXTURE_NODE_WIDTH + "px"}
             height={FIXTURE_NODE_HEIGHT + "px"}
           >
-            <WbFixtureNode match={node} onClickMatch={props.onClickNode ?? (() => { })} onResultSaved={props.onResultSaved ?? (() => { })} />
+            <WbFixtureNode match={node} onClickMatch={props.onClickNode ?? (() => { })} onResultSaved={props.onResultSaved ?? (() => { })} editMode={props.editMode} />
           </Box>
         ))}
 

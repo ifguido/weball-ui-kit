@@ -19,13 +19,14 @@ interface WbFixtureNodeProps {
   ) => void;
 
   onResultSaved: (fixtureVisaulzierId: number, scoreHome?: number, scoreAway?: number) => void;
+  editMode?: boolean;
 }
 
 export const WbFixtureNode = React.forwardRef<
   HTMLDivElement,
   WbFixtureNodeProps
 >((props, ref) => {
-  const { match, onClickMatch, nodeSelected } = props;
+  const { match, onClickMatch, nodeSelected, editMode = false } = props;
   const [showDetails, setShowDetails] = useState(false);
 
   const handleClickMatch = (
@@ -33,7 +34,8 @@ export const WbFixtureNode = React.forwardRef<
     position: "local" | "visit" | "resultLocal" | "resultVisit"
   ) => {
     if (position === "resultLocal" || position === "resultVisit") {
-      if (match?.tournamentMatches?.length && match?.tournamentMatches?.length >= 1) {
+      // Only allow editing results if editMode is enabled
+      if (editMode && match?.tournamentMatches?.length && match?.tournamentMatches?.length >= 1) {
         setEditingResult({ position, visible: true });
       }
       return;
@@ -74,12 +76,14 @@ export const WbFixtureNode = React.forwardRef<
             local={true}
             onClickMatch={handleClickMatch}
             match={match}
+            editMode={editMode}
           />
           <WbFixtureNodeClub
             nodeSelected={nodeSelected}
             local={false}
             onClickMatch={handleClickMatch}
             match={match}
+            editMode={editMode}
           />
         </Flex>
 

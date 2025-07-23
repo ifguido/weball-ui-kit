@@ -11,6 +11,7 @@ interface WbFixtureNodeTeamProps {
     match: Partial<WBFixtureNode>,
     position: "local" | "visit" | "resultLocal" | "resultVisit"
   ) => void;
+  editMode?: boolean;
 }
 
 export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
@@ -18,7 +19,8 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
     onClickMatch,
     match: visualizerMatch,
     local,
-    nodeSelected
+    nodeSelected,
+    editMode = false
   } = props;
 
   const match = visualizerMatch;
@@ -93,8 +95,10 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
         </Tooltip>
       </Flex>
       <div
-        className=" hover:bg-gray-300  transition-all duration-400 w-[20px]  flex justify-center"
-        onClick={() => onClickMatch(match, local ? "resultLocal" : "resultVisit")}
+        className={`transition-all duration-400 w-[20px] flex justify-center ${
+          editMode ? "hover:bg-gray-300 cursor-pointer" : "cursor-default"
+        }`}
+        onClick={editMode ? () => onClickMatch(match, local ? "resultLocal" : "resultVisit") : undefined}
       >
         <Text fontWeight="bold" height={6}>{clubScore}</Text>
       </div>
