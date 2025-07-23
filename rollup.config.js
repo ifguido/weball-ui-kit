@@ -39,10 +39,12 @@ export default defineConfig([
     external: [
       'react',
       'react-dom',
+      'react/jsx-runtime',
       '@chakra-ui/react',
       '@emotion/react',
       '@emotion/styled',
       'framer-motion',
+      'antd',
     ],
   },
   // Type definitions
@@ -56,10 +58,12 @@ export default defineConfig([
     external: [
       'react',
       'react-dom',
+      'react/jsx-runtime',
       '@chakra-ui/react',
       '@emotion/react',
       '@emotion/styled',
       'framer-motion',
+      'antd',
     ],
   },
 ]);

@@ -166,6 +166,34 @@ export type FixtureVisualizer<T = {}> = WeballBaseEntity & {
     matchesPlanning: FixtureVisualizerMatch<any>[];
 } & T;
 
+/**
+ * Helper function to convert an array of fixtures into a FixtureVisualizer object
+ * 
+ * @param fixtures - Array of fixture data
+ * @param options - Optional configuration
+ * @returns FixtureVisualizer object
+ * 
+ * @example
+ * ```typescript
+ * const fixtures = [/* your fixture array *\/];
+ * const fixtureRoot = createFixtureRoot(fixtures);
+ * 
+ * // Use in your component:
+ * // <WbFixture fixtureVisualizerRoot={fixtureRoot} />
+ * ```
+ */
+export function createFixtureRoot<T = any>(
+    fixtures: T[], 
+    options: { id?: number; matchesPlanning?: FixtureVisualizerMatch<any>[] } = {}
+): FixtureVisualizer<{ fixtures: T[] }> {
+    return {
+        id: options.id ?? 1,
+        children: [],
+        matchesPlanning: options.matchesPlanning ?? [],
+        fixtures
+    };
+}
+
 // ========================================
 // LEGACY INTERFACES FOR BACKWARD COMPATIBILITY
 // ========================================

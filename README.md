@@ -44,7 +44,33 @@ Nodo individual de un fixture para uso granular.
 ### WeballUIProvider
 Proveedor que envuelve ChakraProvider con el tema Weball personalizado.
 
+### createFixtureRoot
+Función helper para convertir arrays de fixtures en el formato esperado por los componentes.
+
 ## 🎯 Uso Básico
+
+### Trabajando con Arrays de Datos
+
+Si tienes un array de datos de fixtures, usa la función `createFixtureRoot`:
+
+```jsx
+import { WbFixture, WeballUIProvider, createFixtureRoot } from '@weball/ui-kit';
+
+function App() {
+  const fixturesArray = [
+    // Tu array de datos de fixtures
+    { /* datos del fixture */ }
+  ];
+
+  const fixtureRoot = createFixtureRoot(fixturesArray);
+
+  return (
+    <WeballUIProvider>
+      <WbFixture fixtureVisualizerRoot={fixtureRoot} />
+    </WeballUIProvider>
+  );
+}
+```
 
 ### Opción 1: Con Provider Integrado (Recomendado)
 
