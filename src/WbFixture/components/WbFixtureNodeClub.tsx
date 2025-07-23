@@ -85,12 +85,12 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
           />
         )}
 
-        <Tooltip label={getShortestNameClubInscription(club.clubInscription) || vacancy?.name}>
+        <Tooltip label={getShortestNameClubInscription(club?.clubInscription) || vacancy?.name}>
           <Text
             className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
             fontWeight="bold"
           >
-            {getShortestNameClubInscription(club.clubInscription) || vacancy?.name || ""}
+            {getShortestNameClubInscription(club?.clubInscription) || vacancy?.name || ""}
           </Text>
         </Tooltip>
       </Flex>

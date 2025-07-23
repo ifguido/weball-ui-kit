@@ -1,6 +1,6 @@
 {
   "name": "@weball/ui-kit",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "type": "module",
   "description": "UI Kit library with flexible fixture and tournament components for sports applications",
   "main": "dist/index.js",
