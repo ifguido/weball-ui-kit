@@ -3,12 +3,78 @@ import { FIXTURE_NODE_HEIGHT, FIXTURE_NODE_WIDTH } from "../constants/fixture-me
 import { type FixtureVisualizerMatch, type TournamentMatch } from "../models/types";
 import { SRC_IMG } from "../WbFixture.utils";
 
-interface WbFixtureNodeTeamProps {
-  tournamentMatch: TournamentMatch;
-  fixtureMatch: FixtureVisualizerMatch
+/**
+ * Props interface for WbFixtureResult component
+ * Uses generic types to allow users to pass any data structure that extends the minimum requirements
+ */
+interface WbFixtureNodeTeamProps<
+  TournamentMatchData = any,
+  FixtureMatchData = any
+> {
+  /**
+   * Tournament match data - can be any object that extends the minimum required properties:
+   * - id: number
+   * - scoreHome: number
+   * - scoreAway: number
+   * - scoreHomePenalty?: number
+   * - scoreAwayPenalty?: number
+   * - category: { categoryInstance: { name: string } }
+   * - matchInfo: { vacancyHome: object | null, vacancyAway: object | null }
+   */
+  tournamentMatch: TournamentMatch<TournamentMatchData>;
+  
+  /**
+   * Fixture match data - can be any object that extends the minimum required properties:
+   * - id: number
+   * - clubHome: { clubInscription: { logo: string, name: string, color: string } } | null
+   * - clubAway: { clubInscription: { logo: string, name: string, color: string } } | null
+   */
+  fixtureMatch: FixtureVisualizerMatch<FixtureMatchData>;
 }
 
-export const WbFixtureResult = (props: WbFixtureNodeTeamProps) => {
+/**
+ * WbFixtureResult component - displays tournament match results with team information
+ * 
+ * @example
+ * ```tsx
+ * // Basic usage with minimum required properties
+ * <WbFixtureResult 
+ *   tournamentMatch={{
+ *     id: 1,
+ *     scoreHome: 2,
+ *     scoreAway: 1,
+ *     category: { categoryInstance: { name: "Final" } },
+ *     matchInfo: { vacancyHome: null, vacancyAway: null }
+ *   }}
+ *   fixtureMatch={{
+ *     id: 1,
+ *     clubHome: { clubInscription: { logo: "...", name: "Team A", color: "#fff" } },
+ *     clubAway: { clubInscription: { logo: "...", name: "Team B", color: "#000" } }
+ *   }}
+ * />
+ * 
+ * // Usage with extended data
+ * <WbFixtureResult 
+ *   tournamentMatch={{
+ *     id: 1,
+ *     scoreHome: 2,
+ *     scoreAway: 1,
+ *     customField: "my custom data",
+ *     category: { categoryInstance: { name: "Final", customCategoryData: "..." } },
+ *     matchInfo: { vacancyHome: null, vacancyAway: null, customMatchInfo: "..." }
+ *   }}
+ *   fixtureMatch={{
+ *     id: 1,
+ *     clubHome: { clubInscription: { logo: "...", name: "Team A", color: "#fff", customClubData: "..." } },
+ *     clubAway: { clubInscription: { logo: "...", name: "Team B", color: "#000" } },
+ *     customFixtureData: "my custom fixture data"
+ *   }}
+ * />
+ * ```
+ */
+export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = any>(
+  props: WbFixtureNodeTeamProps<TournamentMatchData, FixtureMatchData>
+) => {
   const {
     tournamentMatch,
     fixtureMatch

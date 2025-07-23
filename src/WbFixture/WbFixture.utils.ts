@@ -1,4 +1,4 @@
-import { FixtureVisualizer, FixtureVisualizerMatch } from "@/modules/private/Instances/modules/SportManagment/SportManagment.types";
+import { FixtureVisualizer, FixtureVisualizerMatch } from "./models/types";
 import { WBFixtureNode } from "./models/FixtureNode.interface";
 
 export const SRC_IMG =

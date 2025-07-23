@@ -1,0 +1,41 @@
+# Source files
+src/
+examples/
+
+# Config files
+.storybook/
+.vscode/
+.github/
+rollup.config.js
+tsconfig.json
+jest.config.js
+.eslintrc.js
+
+# Development files
+*.log
+*.lock
+node_modules/
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build files to exclude (keep only dist)
+storybook-static/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+**/*.test.*
+**/*.spec.*
+__tests__/
+coverage/

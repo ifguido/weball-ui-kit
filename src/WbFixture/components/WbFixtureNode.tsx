@@ -97,7 +97,7 @@ export const WbFixtureNode = React.forwardRef<
               backgroundColor={WbColors.light.darkGrey}
               width={FIXTURE_NODE_WIDTH + "px"}
             >
-              {match.tournamentMatches?.map((tm, index) => (
+              {match.tournamentMatches?.map((tm: any, index: number) => (
                 <React.Fragment key={tm.id}>
                   <WbFixtureResult fixtureMatch={match} tournamentMatch={tm} />
                   {index !== match.tournamentMatches!.length - 1 && <Divider />}

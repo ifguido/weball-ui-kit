@@ -33,7 +33,55 @@ const KEY_PREFIX = {
 // ======================================================
 // 2) Componente principal: WbFixture
 // ======================================================
-export const WbFixture = (props: WbFixtureProps) => {
+
+/**
+ * WbFixture component - displays tournament bracket/fixture visualization
+ * 
+ * @template TFixtureData - Type for fixture visualizer data (can contain any additional properties)  
+ * @template TCupWinnerData - Type for cup winner data (can contain any additional properties)
+ * 
+ * @example
+ * ```tsx
+ * // Basic usage with minimum required properties
+ * <WbFixture
+ *   fixtureVisualizerRoot={{
+ *     id: 1,
+ *     children: [],
+ *     matchesPlanning: [
+ *       {
+ *         id: 1,
+ *         clubHome: { clubInscription: { logo: "...", name: "Team A", color: "#fff" } },
+ *         clubAway: { clubInscription: { logo: "...", name: "Team B", color: "#000" } }
+ *       }
+ *     ]
+ *   }}
+ *   cupWinner={{ id: 1, logo: "...", name: "Winner", color: "#gold" }}
+ *   onClickNode={(match, position) => console.log(match, position)}
+ * />
+ * 
+ * // Usage with extended custom data
+ * <WbFixture
+ *   fixtureVisualizerRoot={{
+ *     id: 1,
+ *     children: [],
+ *     matchesPlanning: [],
+ *     customTournamentName: "World Cup 2024",
+ *     metadata: { season: "2024", region: "Global" }
+ *   }}
+ *   cupWinner={{ 
+ *     id: 1, 
+ *     logo: "...", 
+ *     name: "Winner", 
+ *     color: "#gold",
+ *     stats: { wins: 15, goals: 45 },
+ *     country: "Argentina"
+ *   }}
+ * />
+ * ```
+ */
+export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
+  props: WbFixtureProps<TFixtureData, TCupWinnerData>
+) => {
   // Estado con la lista final de nodos a renderizar (partidos)
   const [matches, setMatches] = useState<WBFixtureNode[]>([]);
   // Cantidad de líneas que se dibujan entre partidos
