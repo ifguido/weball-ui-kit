@@ -41,12 +41,12 @@ export interface WbFixtureProps<
    * ```
    */
   cupWinner?: MinCupWinner & TCupWinnerData;
-  
+
   /**
    * URL or path to the cup logo image
    */
   cupLogo?: string;
-  
+
   /**
    * Callback function triggered when a node is clicked
    * @param match - The fixture visualizer match data (with any additional properties)
@@ -56,7 +56,7 @@ export interface WbFixtureProps<
     match: Partial<FixtureVisualizer<TFixtureData>>,
     position: "local" | "visit" | "resultLocal" | "resultVisit"
   ) => void;
-  
+
   /**
    * Callback function triggered when a result is saved
    * @param fixtureVisualizerId - The ID of the fixture visualizer
@@ -64,7 +64,7 @@ export interface WbFixtureProps<
    * @param scoreAway - Away team score
    */
   onResultSaved?: (fixtureVisualizerId: number, scoreHome?: number, scoreAway?: number) => void;
-  
+
   /**
    * Root fixture visualizer data - can be any object that extends the minimum required properties:
    * - id: number
@@ -91,17 +91,17 @@ export interface WbFixtureProps<
    * ```
    */
   fixtureVisualizerRoot?: FixtureVisualizer<TFixtureData>;
-  
+
   /**
    * Currently selected fixture visualizer node
    */
   nodeSelected?: FixtureVisualizer<TFixtureData>;
-  
+
   /**
    * The stage number to start viewing from
    */
   viewFromStage?: number;
-  
+
   /**
    * Enable or disable edit mode for results
    * When true, allows clicking on scores to edit them

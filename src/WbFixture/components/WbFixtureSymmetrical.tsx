@@ -368,7 +368,6 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
         refWinner.current.style.left = finalNodeLeft + "px";
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refNodes.current, nodes]);
 
   if (!props.fixtureVisualizerRoot || !nodes.length) return;

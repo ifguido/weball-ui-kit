@@ -1,4 +1,4 @@
-import { FixtureVisualizer, FixtureVisualizerMatch } from "./models/types";
+import { ClubInscription, FixtureVisualizer, FixtureVisualizerMatch } from "./models/types";
 import { WBFixtureNode } from "./models/FixtureNode.interface";
 
 export const SRC_IMG =
@@ -108,4 +108,18 @@ export function getOrderedMatchesByParentChildrenCount(
     });
 
     return wbFixtureNodes.filter((m) => m.stageNumberFromFinal >= (fromStage || 0));
+}
+
+export function getShortestNameClubInscription(
+    clubInscription: ClubInscription | undefined,
+    slice: number = 10
+) {
+    return (
+        clubInscription?.tableName ||
+        clubInscription?.name ||
+        clubInscription?.club?.tableShortName ||
+        clubInscription?.club?.tableName ||
+        clubInscription?.club?.name ||
+        ""
+    ).slice(0, slice)
 }

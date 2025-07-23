@@ -1,7 +1,7 @@
 import { Flex, Text, Image, Tooltip } from "@chakra-ui/react";
 import { type WBFixtureNode } from "../models/FixtureNode.interface";
 import { useMemo } from "react";
-import { SRC_IMG } from "../WbFixture.utils";
+import { getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";
 
 interface WbFixtureNodeTeamProps {
   local?: boolean;
@@ -85,19 +85,18 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
           />
         )}
 
-        <Tooltip label={club?.clubInscription?.name || vacancy?.name || ""}>
+        <Tooltip label={getShortestNameClubInscription(club.clubInscription) || vacancy?.name}>
           <Text
             className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
             fontWeight="bold"
           >
-            {club?.clubInscription?.name || vacancy?.name || ""}
+            {getShortestNameClubInscription(club.clubInscription) || vacancy?.name || ""}
           </Text>
         </Tooltip>
       </Flex>
       <div
-        className={`transition-all duration-400 w-[20px] flex justify-center ${
-          editMode ? "hover:bg-gray-300 cursor-pointer" : "cursor-default"
-        }`}
+        className={`transition-all duration-400 w-[20px] flex justify-center ${editMode ? "hover:bg-gray-300 cursor-pointer" : "cursor-default"
+          }`}
         onClick={editMode ? () => onClickMatch(match, local ? "resultLocal" : "resultVisit") : undefined}
       >
         <Text fontWeight="bold" height={6}>{clubScore}</Text>

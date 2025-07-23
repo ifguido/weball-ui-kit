@@ -1,7 +1,7 @@
 import { Flex, Text, Image, Tooltip } from "@chakra-ui/react";
 import { FIXTURE_NODE_HEIGHT, FIXTURE_NODE_WIDTH } from "../constants/fixture-measures.constants";
 import { type FixtureVisualizerMatch, type TournamentMatch } from "../models/types";
-import { SRC_IMG } from "../WbFixture.utils";
+import { getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";
 
 /**
  * Props interface for WbFixtureResult component
@@ -22,7 +22,7 @@ interface WbFixtureNodeTeamProps<
    * - matchInfo: { vacancyHome: object | null, vacancyAway: object | null }
    */
   tournamentMatch: TournamentMatch<TournamentMatchData>;
-  
+
   /**
    * Fixture match data - can be any object that extends the minimum required properties:
    * - id: number
@@ -128,12 +128,13 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
             />
           )}
 
-          <Tooltip label={fixtureMatch.clubHome?.clubInscription.name || tournamentMatch.matchInfo.vacancyHome?.name || ""}>
+
+          <Tooltip label={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""} >
             <Text
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
               fontWeight="bold"
             >
-              {fixtureMatch.clubHome?.clubInscription?.name || tournamentMatch.matchInfo.vacancyHome?.name || ""}
+              {getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
             </Text>
           </Tooltip>
         </Flex>
@@ -175,12 +176,12 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
             />
           )}
 
-          <Tooltip label={fixtureMatch.clubAway?.clubInscription?.name || tournamentMatch.matchInfo.vacancyAway?.name || ""}>
+          <Tooltip label={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}>
             <Text
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
               fontWeight="bold"
             >
-              {fixtureMatch.clubAway?.clubInscription?.name || tournamentMatch.matchInfo.vacancyAway?.name || ""}
+              {getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
             </Text>
           </Tooltip>
         </Flex>
@@ -193,7 +194,7 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
 
         </div>
       </Flex>
-    </Flex>
+    </Flex >
 
   )
 

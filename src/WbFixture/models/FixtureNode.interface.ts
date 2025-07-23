@@ -36,17 +36,17 @@ export type WBFixtureNode<T = any> = FixtureVisualizerMatch<T> & {
    * Group number for organizing fixtures
    */
   groupNumber: number;
-  
+
   /**
    * Stage number counting from the final (final = 0, semi-final = 1, etc.)
    */
   stageNumberFromFinal: number;
-  
+
   /**
    * Node number within the stage
    */
   nodeNumber: number;
-  
+
   /**
    * Parent rank for determining positioning
    */

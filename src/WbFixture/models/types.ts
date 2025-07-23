@@ -71,6 +71,8 @@ export interface MinClubInscription {
     logo: string;
     name: string;
     color: string;
+    tableName?: string;
+    club: Club;
 }
 
 /**
@@ -183,7 +185,7 @@ export type FixtureVisualizer<T = {}> = WeballBaseEntity & {
  * ```
  */
 export function createFixtureRoot<T = any>(
-    fixtures: T[], 
+    fixtures: T[],
     options: { id?: number; matchesPlanning?: FixtureVisualizerMatch<any>[] } = {}
 ): FixtureVisualizer<{ fixtures: T[] }> {
     return {
@@ -198,9 +200,6 @@ export function createFixtureRoot<T = any>(
 // LEGACY INTERFACES FOR BACKWARD COMPATIBILITY
 // ========================================
 
-/**
- * @deprecated Use the generic types above for better flexibility
- */
 export interface Club extends WeballBaseEntity {
     name: string;
     color: string;
