@@ -1,0 +1,13 @@
+export const FIXTURE_BRACE_WIDTH = 10;
+export const FIXTURE_LINE_WIDTH = 10;
+export const FIXTURE_FINAL_LINE_WIDTH = 50;
+export const FIXTURE_NODE_HEIGHT = 80;
+export const FIXTURE_NODE_WIDTH = 170;
+export const FIXTURE_HEIGHT_BETWEEN_NODES = 10;
+export const FIXTURE_HEIGHT_BETWEEN_GROUPS = 35;
+export const FIXTURE_WIDTH_BETWEEN_WINGS = 70;
+export const FIXTURE_STAGE_SIZE = 14;
+export const FIXTURE_WINNER_STAGE_SIZE = 40;
+export const FIXTURE_WINNER_WIDTH = 170;
+export const FIXTURE_WINNER_HEIGHT = 60;
+export const FIXTURE_SCROLL_SIZE = 30;
