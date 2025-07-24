@@ -411,6 +411,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
           borderLeftWidth={0}
           width={FIXTURE_BRACE_WIDTH + "px"}
           borderColor={WbColors.light.inputBorder}
+          backgroundColor={WbColors.light.backgroundGrey}
         />
       ))}
 

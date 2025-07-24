@@ -64,33 +64,34 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(({
         width: typeof width === 'number' ? `${width}px` : width,
         height: typeof height === 'number' ? `${height}px` : height,
 
-        // Border handling - exact Chakra UI behavior
+        // Border handling - Chakra UI behavior
+        // If borderWidth is set, apply to all sides first
         ...(borderWidth && {
             borderWidth: `${borderWidth}px`,
             borderStyle: borderStyle || 'solid',
             borderColor: borderColor || 'currentColor',
         }),
 
-        // Individual border widths
-        ...(borderTopWidth && {
+        // Individual border widths override the general borderWidth
+        ...(borderTopWidth !== undefined && {
             borderTopWidth: `${borderTopWidth}px`,
             borderTopStyle: borderStyle || 'solid',
             borderTopColor: borderColor || 'currentColor',
         }),
-        ...(borderLeftWidth && {
+        ...(borderLeftWidth !== undefined && {
             borderLeftWidth: `${borderLeftWidth}px`,
-            borderLeftStyle: borderStyle || 'solid',
-            borderLeftColor: borderColor || 'currentColor',
+            borderLeftStyle: borderLeftWidth === 0 ? 'none' : (borderStyle || 'solid'),
+            borderLeftColor: borderLeftWidth === 0 ? 'transparent' : (borderColor || 'currentColor'),
         }),
-        ...(borderRightWidth && {
+        ...(borderRightWidth !== undefined && {
             borderRightWidth: `${borderRightWidth}px`,
-            borderRightStyle: borderStyle || 'solid',
-            borderRightColor: borderColor || 'currentColor',
+            borderRightStyle: borderRightWidth === 0 ? 'none' : (borderStyle || 'solid'),
+            borderRightColor: borderRightWidth === 0 ? 'transparent' : (borderColor || 'currentColor'),
         }),
-        ...(borderBottomWidth && {
+        ...(borderBottomWidth !== undefined && {
             borderBottomWidth: `${borderBottomWidth}px`,
-            borderBottomStyle: borderStyle || 'solid',
-            borderBottomColor: borderColor || 'currentColor',
+            borderBottomStyle: borderBottomWidth === 0 ? 'none' : (borderStyle || 'solid'),
+            borderBottomColor: borderBottomWidth === 0 ? 'transparent' : (borderColor || 'currentColor'),
         }),
 
         // Border radius
@@ -98,7 +99,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(({
         borderBottomRightRadius: borderBottomRightRadius ? `${borderBottomRightRadius}px` : undefined,
         borderTopLeftRadius: borderTopLeftRadius ? `${borderTopLeftRadius}px` : undefined,
         borderBottomLeftRadius: borderBottomLeftRadius ? `${borderBottomLeftRadius}px` : undefined,
-        borderLeft: 0,
+
         // Background
         backgroundColor,
 

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Test Braces - Border Fix</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .brace-test-area {
+            border: 2px dashed #ccc;
+            padding: 40px;
+            position: relative;
+            height: 200px;
+            background: white;
+        }
+        
+        /* PROBLEMA: Brace como cuadrado */
+        .bad-brace {
+            position: absolute;
+            width: 20px;
+            height: 60px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #d9d9d9;
+            border-left-width: 0px;
+            border-left-style: solid;  /* ← PROBLEMA: sigue aplicando style aunque width=0 */
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            top: 20px;
+            left: 20px;
+        }
+        
+        /* CORRECTO: Brace bien formado */
+        .good-brace-right {
+            position: absolute;
+            width: 20px;
+            height: 60px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #d9d9d9;
+            border-left-width: 0px;
+            border-left-style: none;  /* ← CORRECCIÓN: none cuando width=0 */
+            border-left-color: transparent;
+            background-color: #e9e9e9;  /* ← AGREGADO: rgb(233, 233, 233) */
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            top: 20px;
+            left: 80px;
+        }
+        
+        .good-brace-left {
+            position: absolute;
+            width: 20px;
+            height: 60px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #d9d9d9;
+            border-right-width: 0px;
+            border-right-style: none;  /* ← CORRECCIÓN: none cuando width=0 */
+            border-right-color: transparent;
+            background-color: #e9e9e9;  /* ← AGREGADO: rgb(233, 233, 233) */
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+            top: 20px;
+            left: 140px;
+        }
+        
+        .label {
+            position: absolute;
+            font-size: 10px;
+            color: #666;
+            text-align: center;
+            width: 60px;
+        }
+        
+        .error { color: #d73027; font-weight: bold; }
+        .success { color: #1a9641; font-weight: bold; }
+        .warning { color: #f57c00; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test de Braces - Corrección de Bordes</h1>
+    
+    <div class="test-container">
+        <h2>⚠️ Problema Identificado</h2>
+        <p><span class="error">PROBLEMA:</span> Los braces se ven como cuadrados porque:</p>
+        <ul>
+            <li><code>borderWidth={1}</code> establece todos los bordes</li>
+            <li><code>borderLeftWidth={0}</code> solo cambia el width, NO el style</li>
+            <li>Resultado: <code>border-left: 0px solid #color</code> → Se ve como línea</li>
+            <li><span class="warning">ADEMÁS:</span> Faltaba <code>backgroundColor: rgb(233, 233, 233)</code></li>
+        </ul>
+    </div>
+    
+    <div class="test-container">
+        <h2>🧪 Comparación Visual</h2>
+        <div class="brace-test-area">
+            <!-- Brace problemático -->
+            <div class="bad-brace"></div>
+            <div class="label" style="top: 90px; left: 5px;">
+                <span class="error">❌ Malo</span><br>
+                <small>Cuadrado</small>
+            </div>
+            
+            <!-- Brace correcto (derecho) -->
+            <div class="good-brace-right"></div>
+            <div class="label" style="top: 90px; left: 65px;">
+                <span class="success">✅ Bueno</span><br>
+                <small>Brace →</small>
+            </div>
+            
+            <!-- Brace correcto (izquierdo) -->
+            <div class="good-brace-left"></div>
+            <div class="label" style="top: 90px; left: 125px;">
+                <span class="success">✅ Bueno</span><br>
+                <small>← Brace</small>
+            </div>
+            
+            <div style="position: absolute; bottom: 10px; left: 10px; font-size: 12px;">
+                <span class="success">Si ves forma de "C" y "⊃" → FIX CORRECTO</span><br>
+                <span class="error">Si ves cuadrados → Problema persiste</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>🔧 Corrección Implementada en Box.tsx</h2>
+        <pre style="background: #f8f8f8; padding: 10px; border-radius: 4px; font-size: 12px;">
+<span class="success">// ANTES (Problemático)</span>
+...(borderLeftWidth && {
+    borderLeftWidth: `${borderLeftWidth}px`,
+    borderLeftStyle: borderStyle || 'solid',  // ← PROBLEMA
+    borderLeftColor: borderColor || 'currentColor',
+})
+
+<span class="success">// DESPUÉS (Correcto)</span>
+...(borderLeftWidth !== undefined && {
+    borderLeftWidth: `${borderLeftWidth}px`,
+    borderLeftStyle: borderLeftWidth === 0 ? 'none' : (borderStyle || 'solid'),  // ← FIX
+    borderLeftColor: borderLeftWidth === 0 ? 'transparent' : (borderColor || 'currentColor'),
+})
+        </pre>
+    </div>
+    
+    <div class="test-container">
+        <h2>📋 Casos de Uso</h2>
+        <div style="font-family: monospace; font-size: 12px;">
+            <div><span class="success">✅ WbFixture brace (derecho):</span></div>
+            <div>&nbsp;&nbsp;borderWidth={1} + borderLeftWidth={0} + backgroundColor="#e9e9e9" = Forma "⊃"</div>
+            <br>
+            <div><span class="success">✅ WbFixtureSymmetrical brace (izquierdo):</span></div>
+            <div>&nbsp;&nbsp;borderWidth={1} + borderRightWidth={0} + backgroundColor="#e9e9e9" = Forma "C"</div>
+            <br>
+            <div><span class="warning">⚠️ Líneas horizontales:</span></div>
+            <div>&nbsp;&nbsp;height="1px" + borderTopWidth={1} = Línea horizontal</div>
+            <br>
+            <div><span class="success">🎯 Color de producción:</span></div>
+            <div>&nbsp;&nbsp;backgroundColor: rgb(233, 233, 233) = #e9e9e9 = WbColors.light.backgroundGrey</div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Testing Brace Borders...');
+            
+            const badBrace = document.querySelector('.bad-brace');
+            const goodBraceRight = document.querySelector('.good-brace-right');
+            const goodBraceLeft = document.querySelector('.good-brace-left');
+            
+            [
+                { el: badBrace, name: 'Bad Brace' },
+                { el: goodBraceRight, name: 'Good Brace Right' },
+                { el: goodBraceLeft, name: 'Good Brace Left' }
+            ].forEach(({ el, name }) => {
+                if (el) {
+                    const styles = window.getComputedStyle(el);
+                    console.log(`${name}:`, {
+                        borderLeft: styles.borderLeft,
+                        borderRight: styles.borderRight,
+                        borderTop: styles.borderTop,
+                        borderBottom: styles.borderBottom
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

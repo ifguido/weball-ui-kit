@@ -485,6 +485,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
             borderLeftWidth={0}
             width={FIXTURE_BRACE_WIDTH + "px"}
             borderColor={WbColors.light.inputBorder}
+            backgroundColor={WbColors.light.backgroundGrey}
           />
         ))}
 
@@ -502,6 +503,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
             borderRightWidth={0}
             width={FIXTURE_BRACE_WIDTH + "px"}
             borderColor={WbColors.light.inputBorder}
+            backgroundColor={WbColors.light.backgroundGrey}
           />
         ))}
 
