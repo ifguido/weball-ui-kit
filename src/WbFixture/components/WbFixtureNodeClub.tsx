@@ -1,7 +1,8 @@
-import { Flex, Text, Image, Tooltip } from "../../components";
+import { Flex, Text, Image } from "../../components";
 import { type WBFixtureNode } from "../models/FixtureNode.interface";
 import { useMemo } from "react";
 import { getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";
+import { Tooltip } from "antd";
 
 interface WbFixtureNodeTeamProps {
   local?: boolean;
@@ -32,7 +33,6 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
 
     const hasOnlyOneMAtch = match?.tournamentMatches?.length === 1;
     if (hasOnlyOneMAtch) {
-      console.log(match?.tournamentMatches?.[0].scoreHome, match?.tournamentMatches?.[0].scoreAway)
       return {
         clubScore: local ? match?.tournamentMatches?.[0].scoreHome : match?.tournamentMatches?.[0].scoreAway
       }
@@ -85,7 +85,7 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
           />
         )}
 
-        <Tooltip label={getShortestNameClubInscription(club?.clubInscription) || vacancy?.name}>
+        <Tooltip title={getShortestNameClubInscription(club?.clubInscription) || vacancy?.name}>
           <Text
             className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
             fontWeight="bold"

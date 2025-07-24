@@ -119,7 +119,6 @@ export const WbFixtureNode = React.forwardRef<
         }
         open={editingResult.visible}
         onOk={() => {
-          console.log(`Nuevo valor para ${editingResult.position}:`, inputScore);
           setEditingResult({ ...editingResult, visible: false });
           if (inputScore !== null) {
             const scoreHome = editingResult.position === "resultLocal" ? +inputScore : match.valueScoreHome ? + match.valueScoreHome : 0;

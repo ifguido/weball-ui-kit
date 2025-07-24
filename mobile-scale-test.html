@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Scale Flash Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .resize-simulator {
+            background: #e9e9e9;
+            border: 2px dashed #ccc;
+            padding: 10px;
+            margin-bottom: 20px;
+            transition: width 0.3s ease;
+            min-height: 300px;
+            overflow: hidden;
+        }
+        
+        .controls {
+            margin-bottom: 20px;
+        }
+        
+        .control-button {
+            margin: 5px;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .control-button:hover {
+            background: #0056b3;
+        }
+        
+        .info {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+        }
+        
+        /* Simulate tournament bracket */
+        .mock-bracket {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            min-width: 800px;
+            height: 200px;
+            background: linear-gradient(45deg, #f0f0f0, #ffffff);
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            transform-origin: top left;
+            transition: transform 0.2s ease-out;
+            will-change: transform;
+        }
+        
+        .mock-node {
+            width: 120px;
+            height: 60px;
+            background: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .mock-line {
+            width: 30px;
+            height: 2px;
+            background: #ccc;
+        }
+        
+        /* Responsive scaling simulation */
+        @media (max-width: 900px) {
+            .mock-bracket {
+                transform: scale(0.9);
+            }
+        }
+        
+        @media (max-width: 800px) {
+            .mock-bracket {
+                transform: scale(0.8);
+            }
+        }
+        
+        @media (max-width: 700px) {
+            .mock-bracket {
+                transform: scale(0.7);
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .mock-bracket {
+                transform: scale(0.6);
+            }
+        }
+        
+        @media (max-width: 500px) {
+            .mock-bracket {
+                transform: scale(0.5);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Mobile Scale Flash Test</h1>
+        
+        <div class="info">
+            <strong>Test Instructions:</strong>
+            <ul>
+                <li>Use the buttons below to simulate different screen sizes</li>
+                <li>Watch for any flashing or jarring transitions</li>
+                <li>The bracket should scale smoothly without flash</li>
+                <li>On real mobile devices, resize the browser window or rotate the device</li>
+            </ul>
+        </div>
+        
+        <div class="controls">
+            <button class="control-button" onclick="setWidth('100%')">Desktop (100%)</button>
+            <button class="control-button" onclick="setWidth('900px')">Tablet (900px)</button>
+            <button class="control-button" onclick="setWidth('700px')">Mobile Large (700px)</button>
+            <button class="control-button" onclick="setWidth('500px')">Mobile Small (500px)</button>
+            <button class="control-button" onclick="setWidth('350px')">Mobile Tiny (350px)</button>
+            <button class="control-button" onclick="animateResize()">Animate Resize</button>
+        </div>
+        
+        <div id="resizeContainer" class="resize-simulator">
+            <div class="mock-bracket">
+                <div class="mock-node">Team A vs B</div>
+                <div class="mock-line"></div>
+                <div class="mock-node">Team C vs D</div>
+                <div class="mock-line"></div>
+                <div class="mock-node">Winner</div>
+                <div class="mock-line"></div>
+                <div class="mock-node">🏆 Champion</div>
+            </div>
+        </div>
+        
+        <div class="info">
+            <strong>Expected Behavior:</strong>
+            <p>✅ Smooth scaling transitions with CSS transition</p>
+            <p>✅ No visual flashing or jarring movements</p>
+            <p>✅ Debounced resize events prevent rapid scale changes</p>
+            <p>✅ Transform changes are throttled to 100ms intervals</p>
+        </div>
+        
+        <div class="info">
+            <strong>Fixed Issues:</strong>
+            <p>🔧 Added debouncing to scale state updates (50ms delay)</p>
+            <p>🔧 Added throttling to ResizeObserver events (100ms delay)</p>
+            <p>🔧 Added minimum scale difference threshold (2%) to prevent micro-adjustments</p>
+            <p>🔧 Added CSS transition for smooth transform changes</p>
+            <p>🔧 Added will-change: transform for better performance</p>
+        </div>
+    </div>
+
+    <script>
+        function setWidth(width) {
+            const container = document.getElementById('resizeContainer');
+            container.style.width = width;
+        }
+        
+        function animateResize() {
+            const container = document.getElementById('resizeContainer');
+            const sizes = ['100%', '800px', '600px', '400px', '350px', '500px', '700px', '100%'];
+            let index = 0;
+            
+            const animate = () => {
+                if (index < sizes.length) {
+                    container.style.width = sizes[index];
+                    index++;
+                    setTimeout(animate, 800);
+                }
+            };
+            
+            animate();
+        }
+        
+        // Simulate real resize events for testing
+        window.addEventListener('resize', () => {
+            console.log('Window resized to:', window.innerWidth + 'x' + window.innerHeight);
+        });
+        
+        // Debug logging for transform changes
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    const target = mutation.target;
+                    if (target.classList.contains('mock-bracket')) {
+                        console.log('Transform changed:', target.style.transform);
+                    }
+                }
+            });
+        });
+        
+        document.querySelectorAll('.mock-bracket').forEach(bracket => {
+            observer.observe(bracket, { attributes: true });
+        });
+    </script>
+</body>
+</html>

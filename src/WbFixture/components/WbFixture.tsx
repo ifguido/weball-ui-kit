@@ -116,6 +116,9 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
   // Estado para responsive scaling
   const [scale, setScale] = useState<number>(1);
   const [fixtureWidth, setFixtureWidth] = useState<number>(0);
+  
+  // Ref para debouncing del scale
+  const scaleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // ------------------------------------------------------
   // useEffect: cuando cambia el fixtureVisualizerRoot
@@ -192,23 +195,59 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
       if (containerWidth > 0 && baseWidth > containerWidth) {
         // Calculate scale to fit
         const newScale = containerWidth / baseWidth;
-        setScale(Math.min(newScale, 1)); // Never scale larger than 100%
+        const finalScale = Math.min(newScale, 1); // Never scale larger than 100%
+        
+        // Only update scale if the difference is significant (> 2%) to prevent flashing
+        if (Math.abs(scale - finalScale) > 0.02) {
+          // Clear existing timeout
+          if (scaleTimeoutRef.current) {
+            clearTimeout(scaleTimeoutRef.current);
+          }
+          
+          // Debounce scale updates to prevent rapid changes
+          scaleTimeoutRef.current = setTimeout(() => {
+            setScale(finalScale);
+          }, 50);
+        }
       } else {
-        setScale(1);
+        if (scale !== 1) {
+          // Clear existing timeout
+          if (scaleTimeoutRef.current) {
+            clearTimeout(scaleTimeoutRef.current);
+          }
+          
+          scaleTimeoutRef.current = setTimeout(() => {
+            setScale(1);
+          }, 50);
+        }
       }
     };
 
     // Initial calculation
     updateScale();
 
-    // Set up resize observer
-    const resizeObserver = new ResizeObserver(updateScale);
+    // Set up resize observer with throttling
+    let resizeTimeout: NodeJS.Timeout | null = null;
+    const throttledUpdateScale = () => {
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
+      resizeTimeout = setTimeout(updateScale, 100);
+    };
+
+    const resizeObserver = new ResizeObserver(throttledUpdateScale);
     resizeObserver.observe(containerRef.current);
 
     return () => {
       resizeObserver.disconnect();
+      if (scaleTimeoutRef.current) {
+        clearTimeout(scaleTimeoutRef.current);
+      }
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+      }
     };
-  }, [responsive, rootStageNumberToShow]);
+  }, [responsive, rootStageNumberToShow, scale]);
 
   // ------------------------------------------------------
   // useEffect: posicionar y dibujar nodos/lines una vez
@@ -373,6 +412,8 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
         height: responsive && scale < 1 ? 'auto' : 'auto',
         minWidth: responsive && scale < 1 ? `${fixtureWidth}px` : undefined,
         overflow: 'visible',
+        transition: responsive ? 'transform 0.2s ease-out' : undefined,
+        willChange: responsive ? 'transform' : undefined,
       }}
     >
       {/* Render de cada partido (nodo) */}

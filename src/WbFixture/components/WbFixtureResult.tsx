@@ -1,4 +1,5 @@
-import { Flex, Text, Image, Tooltip } from "../../components";
+import { Tooltip } from "antd";
+import { Flex, Text, Image } from "../../components";
 import { FIXTURE_NODE_HEIGHT, FIXTURE_NODE_WIDTH } from "../constants/fixture-measures.constants";
 import { type FixtureVisualizerMatch, type TournamentMatch } from "../models/types";
 import { getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";
@@ -129,7 +130,7 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
           )}
 
 
-          <Tooltip label={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""} >
+          <Tooltip title={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""} >
             <Text
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
               fontWeight="bold"
@@ -176,7 +177,7 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
             />
           )}
 
-          <Tooltip label={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}>
+          <Tooltip title={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}>
             <Text
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
               fontWeight="bold"
@@ -190,7 +191,7 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
         >
           <Text fontWeight="bold" height={6}>{tournamentMatch.scoreAway || 0}</Text>
 
-          <span>{showPenalty ? (<span className="text-[10px]">({tournamentMatch.scoreHomePenalty || 0})</span>) : null}</span>
+          <span>{showPenalty ? (<span className="text-[10px]">({tournamentMatch.scoreAwayPenalty || 0})</span>) : null}</span>
 
         </div>
       </Flex>
