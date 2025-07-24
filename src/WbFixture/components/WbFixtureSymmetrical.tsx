@@ -466,6 +466,10 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
             position="absolute"
             width={FIXTURE_NODE_WIDTH + "px"}
             height={FIXTURE_NODE_HEIGHT + "px"}
+            borderTopLeftRadius={12}
+            borderTopRightRadius={12}
+            borderBottomRightRadius={12}
+            borderBottomLeftRadius={12}
             backgroundColor={WbColors.light.backgroundGrey}
 
           >

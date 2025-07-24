@@ -386,6 +386,10 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
           width={FIXTURE_NODE_WIDTH + "px"}
           height={FIXTURE_NODE_HEIGHT + "px"}
           backgroundColor={WbColors.light.backgroundGrey}
+          borderTopLeftRadius={12}
+          borderTopRightRadius={12}
+          borderBottomRightRadius={12}
+          borderBottomLeftRadius={12}
 
         >
           <WbFixtureNode
