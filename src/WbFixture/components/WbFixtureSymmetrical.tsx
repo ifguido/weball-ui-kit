@@ -444,7 +444,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
         overflow: 'visible',
       }}
     >
-            <Box
+      <Box
         ref={containerRef}
         position="relative"
         style={{
@@ -466,6 +466,8 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
             position="absolute"
             width={FIXTURE_NODE_WIDTH + "px"}
             height={FIXTURE_NODE_HEIGHT + "px"}
+            backgroundColor={WbColors.light.backgroundGrey}
+
           >
             <WbFixtureNode match={node} onClickMatch={onClickNode ?? (() => { })} onResultSaved={onResultSaved ?? (() => { })} editMode={editMode} />
           </Box>
@@ -485,7 +487,6 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
             borderLeftWidth={0}
             width={FIXTURE_BRACE_WIDTH + "px"}
             borderColor={WbColors.light.inputBorder}
-            backgroundColor={WbColors.light.backgroundGrey}
           />
         ))}
 
@@ -503,7 +504,6 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
             borderRightWidth={0}
             width={FIXTURE_BRACE_WIDTH + "px"}
             borderColor={WbColors.light.inputBorder}
-            backgroundColor={WbColors.light.backgroundGrey}
           />
         ))}
 
