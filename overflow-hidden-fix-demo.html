@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overflow Hidden Fix - Absolute Position Elements</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .test-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .example-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+        }
+
+        .problem-demo {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .solution-demo {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        /* PROBLEMA: Container padre con overflow hidden */
+        .parent-container-problem {
+            width: 300px;
+            height: 200px;
+            border: 3px solid #dc3545;
+            background: #fff;
+            overflow: hidden; /* Esto oculta los elementos absolute */
+            position: relative;
+            margin: 20px auto;
+        }
+
+        .scaled-content-problem {
+            width: 600px; /* Más ancho que el container */
+            height: 400px; /* Más alto que el container */
+            background: linear-gradient(45deg, #ffeb3b, #ff9800);
+            transform: scale(0.5);
+            transform-origin: top left;
+            position: relative;
+        }
+
+        /* SOLUCIÓN: Container ajustado al contenido escalado */
+        .parent-container-solution {
+            width: 300px; /* = 600px * 0.5 */
+            height: 200px; /* = 400px * 0.5 */
+            border: 3px solid #28a745;
+            background: #fff;
+            overflow: hidden; /* Ahora funciona correctamente */
+            position: relative;
+            margin: 20px auto;
+        }
+
+        .scaled-content-solution {
+            width: 600px;
+            height: 400px;
+            background: linear-gradient(45deg, #4caf50, #81c784);
+            transform: scale(0.5);
+            transform-origin: top center;
+            position: relative;
+        }
+
+        .absolute-element {
+            position: absolute;
+            width: 80px;
+            height: 40px;
+            background: #ff4444;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .element-1 { top: 20px; left: 20px; }
+        .element-2 { top: 20px; right: 20px; }
+        .element-3 { bottom: 20px; left: 20px; }
+        .element-4 { bottom: 20px; right: 20px; }
+        .element-center { top: 50%; left: 50%; transform: translate(-50%, -50%); background: #4444ff; }
+
+        .controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .control-button {
+            margin: 5px;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .control-button:hover {
+            background: #0056b3;
+        }
+
+        .info-panel {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .code-block {
+            background: #263238;
+            color: #e8f5e8;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            color: #333;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔧 Overflow Hidden Fix - Position Absolute</h1>
+        
+        <div class="info-panel">
+            <strong>PROBLEMA IDENTIFICADO:</strong><br>
+            Cuando el container padre tiene <code>overflow: hidden</code> y el contenido interno se escala con <code>transform: scale()</code>, 
+            los elementos con <code>position: absolute</code> se posicionan fuera de los límites visibles del container.
+        </div>
+
+        <div class="example-section problem-demo">
+            <h3 class="error">❌ PROBLEMA: Elementos cortados</h3>
+            <p>Container: 300x200px | Contenido: 600x400px | Scale: 0.5 | Overflow: hidden</p>
+            
+            <div class="parent-container-problem">
+                <div class="scaled-content-problem">
+                    <div class="absolute-element element-1">Top L</div>
+                    <div class="absolute-element element-2">Top R</div>
+                    <div class="absolute-element element-3">Bot L</div>
+                    <div class="absolute-element element-4">Bot R</div>
+                    <div class="absolute-element element-center">Center</div>
+                </div>
+            </div>
+            
+            <div class="code-block">
+// ❌ PROBLEMA
+&lt;Box style={{
+  width: '100%',
+  height: 'auto',
+  <span class="highlight">overflow: 'hidden'</span> // ❌ Oculta elementos absolute
+}}&gt;
+  &lt;Box style={{
+    transform: `scale(${scale})`,
+    width: '100%', // ❌ No considera dimensiones reales
+    height: 'auto' // ❌ No ajusta al contenido escalado
+  }}&gt;
+    {/* Elementos con position: absolute se cortan */}
+  &lt;/Box&gt;
+&lt;/Box&gt;
+            </div>
+        </div>
+
+        <div class="example-section solution-demo">
+            <h3 class="success">✅ SOLUCIÓN: Container ajustado</h3>
+            <p>Container: 300x200px (= 600x400 * 0.5) | Contenido: 600x400px | Scale: 0.5</p>
+            
+            <div class="parent-container-solution">
+                <div class="scaled-content-solution">
+                    <div class="absolute-element element-1">Top L</div>
+                    <div class="absolute-element element-2">Top R</div>
+                    <div class="absolute-element element-3">Bot L</div>
+                    <div class="absolute-element element-4">Bot R</div>
+                    <div class="absolute-element element-center">Center</div>
+                </div>
+            </div>
+            
+            <div class="code-block">
+// ✅ SOLUCIÓN
+&lt;Box style={{
+  width: '100%',
+  <span class="highlight">height: `${containerDimensions.height * scale}px`</span>, // ✅ Ajustado al scale
+  overflow: isResponsiveActive ? 'hidden' : 'visible', // ✅ Solo hidden cuando necesario
+}}&gt;
+  &lt;Box style={{
+    transform: `scale(${scale})`,
+    <span class="highlight">width: `${containerDimensions.width}px`</span>, // ✅ Dimensiones reales
+    <span class="highlight">height: `${containerDimensions.height}px`</span>, // ✅ Altura real
+    transformOrigin: 'top center' // ✅ Escalado centrado
+  }}&gt;
+    {/* Elementos absolute ahora son visibles */}
+  &lt;/Box&gt;
+&lt;/Box&gt;
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-button" onclick="toggleScale()">Toggle Scale (0.3 ↔ 1.0)</button>
+            <button class="control-button" onclick="toggleOrigin()">Toggle Origin (top-left ↔ top-center)</button>
+            <button class="control-button" onclick="animateScale()">Animate Scale</button>
+        </div>
+
+        <div class="info-panel">
+            <strong>CAMBIOS TÉCNICOS IMPLEMENTADOS:</strong><br><br>
+            
+            <strong>1. Estado para dimensiones del container:</strong><br>
+            <code>const [containerDimensions, setContainerDimensions] = useState({width: 0, height: 0});</code><br><br>
+            
+            <strong>2. Almacenar dimensiones calculadas:</strong><br>
+            <code>setContainerDimensions({ width, height });</code><br><br>
+            
+            <strong>3. Container padre ajustado:</strong><br>
+            <code>height: responsive && isResponsiveActive ? `${containerDimensions.height * scale}px` : 'auto'</code><br><br>
+            
+            <strong>4. Container interno con dimensiones fijas:</strong><br>
+            <code>width: `${containerDimensions.width}px`</code><br>
+            <code>height: `${containerDimensions.height}px`</code><br><br>
+            
+            <strong>5. Overflow inteligente:</strong><br>
+            <code>overflow: responsive && isResponsiveActive ? 'hidden' : 'visible'</code>
+        </div>
+
+        <div class="info-panel">
+            <strong>CÓMO USAR EN TU CÓDIGO:</strong><br><br>
+            
+            <strong>1. Para WbFixtureSymmetrical:</strong><br>
+            <code>&lt;WbFixtureSymmetrical responsive={true} .../&gt;</code><br><br>
+            
+            <strong>2. Para WbFixture:</strong><br>
+            <code>&lt;WbFixture responsive={true} .../&gt;</code><br><br>
+            
+            <strong>3. El container padre automáticamente:</strong><br>
+            • Se ajusta al contenido escalado<br>
+            • Muestra overflow: hidden solo cuando es necesario<br>
+            • Mantiene todos los elementos absolute visibles<br>
+            • Centra el scaling para mejor UX
+        </div>
+    </div>
+
+    <script>
+        let currentScale = 0.5;
+        let currentOrigin = 'top center';
+
+        function toggleScale() {
+            currentScale = currentScale === 0.5 ? 0.3 : 1.0;
+            
+            const problemContent = document.querySelector('.scaled-content-problem');
+            const solutionContent = document.querySelector('.scaled-content-solution');
+            const solutionParent = document.querySelector('.parent-container-solution');
+            
+            problemContent.style.transform = `scale(${currentScale})`;
+            solutionContent.style.transform = `scale(${currentScale})`;
+            
+            // Ajustar el container padre en la solución
+            solutionParent.style.width = `${600 * currentScale}px`;
+            solutionParent.style.height = `${400 * currentScale}px`;
+            
+            console.log(`Scale changed to: ${currentScale}`);
+        }
+
+        function toggleOrigin() {
+            currentOrigin = currentOrigin === 'top center' ? 'top left' : 'top center';
+            
+            const problemContent = document.querySelector('.scaled-content-problem');
+            const solutionContent = document.querySelector('.scaled-content-solution');
+            
+            problemContent.style.transformOrigin = currentOrigin;
+            solutionContent.style.transformOrigin = currentOrigin;
+            
+            console.log(`Transform origin changed to: ${currentOrigin}`);
+        }
+
+        function animateScale() {
+            const scales = [1.0, 0.8, 0.6, 0.4, 0.3, 0.5, 0.7, 1.0];
+            let index = 0;
+            
+            const animate = () => {
+                if (index < scales.length) {
+                    currentScale = scales[index];
+                    
+                    const problemContent = document.querySelector('.scaled-content-problem');
+                    const solutionContent = document.querySelector('.scaled-content-solution');
+                    const solutionParent = document.querySelector('.parent-container-solution');
+                    
+                    problemContent.style.transform = `scale(${currentScale})`;
+                    solutionContent.style.transform = `scale(${currentScale})`;
+                    
+                    // Ajustar el container padre en la solución
+                    solutionParent.style.width = `${600 * currentScale}px`;
+                    solutionParent.style.height = `${400 * currentScale}px`;
+                    
+                    console.log(`Animation step ${index + 1}: scale(${currentScale})`);
+                    
+                    index++;
+                    setTimeout(animate, 800);
+                } else {
+                    console.log('Animation completed!');
+                }
+            };
+            
+            console.log('Starting scale animation...');
+            animate();
+        }
+
+        // Initial log
+        console.log('Overflow Hidden Fix Demo loaded. Use buttons to test the solution.');
+    </script>
+</body>
+</html>

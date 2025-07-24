@@ -55,6 +55,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
   // Estado para responsive scaling
   const [scale, setScale] = useState<number>(1);
   const [isResponsiveActive, setIsResponsiveActive] = useState<boolean>(false);
+  const [containerDimensions, setContainerDimensions] = useState<{width: number, height: number}>({width: 0, height: 0});
   
   // Refs para debouncing y control
   const scaleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -132,6 +133,9 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
         FIXTURE_HEIGHT_BETWEEN_NODES +
         FIXTURE_STAGE_SIZE) +
       FIXTURE_SCROLL_SIZE;
+
+    // Store calculated dimensions for responsive handling
+    setContainerDimensions({ width, height });
 
     if (containerRef.current) {
       // Solo establecer dimensiones fijas si no es responsive
@@ -488,9 +492,12 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
     <Box
       style={{
         width: '100%',
-        height: 'auto',
+        height: responsive && isResponsiveActive 
+          ? `${containerDimensions.height * scale}px` 
+          : 'auto',
         minHeight: 'fit-content',
-        overflow: responsive ? 'hidden' : 'visible', // Hide overflow when responsive to prevent scrollbars
+        overflow: responsive && isResponsiveActive ? 'hidden' : 'visible',
+        position: 'relative', // Ensure proper positioning context
       }}
     >
       <Box
@@ -498,10 +505,14 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
         position="relative"
         style={{
           transform: responsive && isResponsiveActive ? `scale(${scale})` : undefined,
-          transformOrigin: 'top center', // Center the scaling
-          width: '100%',
+          transformOrigin: 'top center',
+          width: responsive && isResponsiveActive 
+            ? `${containerDimensions.width}px` 
+            : '100%',
+          height: responsive && isResponsiveActive 
+            ? `${containerDimensions.height}px` 
+            : 'auto',
           minHeight: responsive ? '400px' : '600px',
-          height: 'auto',
           overflow: 'visible',
           transition: responsive ? 'transform 0.3s ease-out' : undefined,
           willChange: responsive ? 'transform' : undefined,

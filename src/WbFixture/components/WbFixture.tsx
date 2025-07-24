@@ -116,6 +116,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
   // Estado para responsive scaling
   const [scale, setScale] = useState<number>(1);
   const [isResponsiveActive, setIsResponsiveActive] = useState<boolean>(false);
+  const [containerDimensions, setContainerDimensions] = useState<{width: number, height: number}>({width: 0, height: 0});
   
   // Refs para debouncing y control
   const scaleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -155,6 +156,9 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
       (maxChildren / 2 - 1) * FIXTURE_HEIGHT_BETWEEN_GROUPS +
       (FIXTURE_STAGE_SIZE + FIXTURE_HEIGHT_BETWEEN_NODES) * 2 +
       FIXTURE_SCROLL_SIZE;
+
+    // Store calculated dimensions for responsive handling
+    setContainerDimensions({ width: containerWidth, height: containerHeight });
 
     if (containerRef.current) {
       // Solo establecer dimensiones fijas si no es responsive
@@ -413,18 +417,33 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
   // ======================================================
   return (
     <Box
-      className="relative"
-      ref={containerRef}
       style={{
-        transform: responsive && isResponsiveActive ? `scale(${scale})` : undefined,
-        transformOrigin: 'top center', // Center the scaling
         width: '100%',
-        height: 'auto',
-        overflow: 'visible',
-        transition: responsive ? 'transform 0.3s ease-out' : undefined,
-        willChange: responsive ? 'transform' : undefined,
+        height: responsive && isResponsiveActive 
+          ? `${containerDimensions.height * scale}px` 
+          : 'auto',
+        minHeight: 'fit-content',
+        overflow: responsive && isResponsiveActive ? 'hidden' : 'visible',
+        position: 'relative',
       }}
     >
+      <Box
+        className="relative"
+        ref={containerRef}
+        style={{
+          transform: responsive && isResponsiveActive ? `scale(${scale})` : undefined,
+          transformOrigin: 'top center',
+          width: responsive && isResponsiveActive 
+            ? `${containerDimensions.width}px` 
+            : '100%',
+          height: responsive && isResponsiveActive 
+            ? `${containerDimensions.height}px` 
+            : 'auto',
+          overflow: 'visible',
+          transition: responsive ? 'transform 0.3s ease-out' : undefined,
+          willChange: responsive ? 'transform' : undefined,
+        }}
+      >
       {/* Render de cada partido (nodo) */}
       {matches.map((node: WBFixtureNode, index: number) => (
         <Box
@@ -550,6 +569,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
           </Text>
         </Box>
       </Flex>
+      </Box>
     </Box>
   );
 };
