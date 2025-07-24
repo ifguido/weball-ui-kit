@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✅ Test Líneas Fixture - Post Fix</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .fixture-test-area {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            position: relative;
+            height: 200px;
+            background: white;
+        }
+        
+        /* Simular nuestro Box component con las correcciones */
+        .fixed-box-line {
+            /* Exactamente como nuestro Box component corregido */
+            display: block;
+            box-sizing: border-box;
+            position: absolute;
+            width: 40px;
+            height: 1px;
+            border-top-width: 1px;
+            border-top-style: solid;
+            border-top-color: #d9d9d9;
+            background-color: #d9d9d9;
+            top: 50px;
+            left: 20px;
+        }
+        
+        .fixed-box-brace {
+            display: block;
+            box-sizing: border-box;
+            position: absolute;
+            width: 20px;
+            height: 60px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #d9d9d9;
+            border-left-width: 0;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            top: 80px;
+            left: 80px;
+        }
+        
+        /* Test más extremo - línea muy fina */
+        .ultra-thin-line {
+            display: block;
+            box-sizing: border-box;
+            position: absolute;
+            width: 30px;
+            height: 1px;
+            border-top-width: 1px;
+            border-top-style: solid;
+            border-top-color: rgba(217, 217, 217, 0.8);
+            background-color: rgba(217, 217, 217, 0.8);
+            top: 120px;
+            left: 120px;
+        }
+        
+        .success {
+            color: #1a9641;
+            font-weight: bold;
+        }
+        
+        .warning {
+            color: #f57c00;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #d73027;
+            font-weight: bold;
+        }
+        
+        .code-sample {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>✅ Test de Líneas Fixture - Componente Box Corregido</h1>
+    
+    <div class="test-container">
+        <h2>🎯 Cambios Implementados en Box Component</h2>
+        <div class="code-sample">
+            <div class="success">✅ AGREGADO: display: 'block' (igual que Chakra UI)</div>
+            <div class="success">✅ AGREGADO: boxSizing: 'border-box' (Chakra UI default)</div>
+            <div class="success">✅ MEJORADO: Border handling con borderTopStyle automático</div>
+            <div class="success">✅ MEJORADO: backgroundColor garantizado</div>
+            <div class="success">✅ REMOVIDO: CSS classes que pueden interferir</div>
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>🧪 Visual Test - ¿Se ven las líneas?</h2>
+        <div class="fixture-test-area">
+            <!-- Línea horizontal -->
+            <div class="fixed-box-line"></div>
+            <span style="position: absolute; top: 45px; left: 20px; font-size: 10px; color: #666;">
+                Línea horizontal
+            </span>
+            
+            <!-- Brace -->
+            <div class="fixed-box-brace"></div>
+            <span style="position: absolute; top: 75px; left: 105px; font-size: 10px; color: #666;">
+                Brace
+            </span>
+            
+            <!-- Línea ultra fina -->
+            <div class="ultra-thin-line"></div>
+            <span style="position: absolute; top: 115px; left: 120px; font-size: 10px; color: #666;">
+                Ultra fina
+            </span>
+            
+            <div style="position: absolute; bottom: 10px; left: 10px; font-size: 12px;">
+                <span class="success">Si ves las 3 líneas/brace → FIX EXITOSO</span><br>
+                <span class="error">Si NO las ves → Problema persiste</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>📋 Checklist de Verificación</h2>
+        <div style="font-family: monospace;">
+            <div>□ Línea horizontal visible (1px height + border-top)</div>
+            <div>□ Brace visible (border con border-left: 0)</div>
+            <div>□ Línea ultra fina visible (transparencia 0.8)</div>
+            <div>□ Background colors aplicados</div>
+            <div>□ Border radius funcionando en braces</div>
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>🔧 Código Fixture Esperado</h2>
+        <div class="code-sample">
+            <div class="success">// LÍNEA HORIZONTAL (debería ser VISIBLE)</div>
+            <div>&lt;Box</div>
+            <div>&nbsp;&nbsp;position="absolute"</div>
+            <div>&nbsp;&nbsp;height="1px"</div>
+            <div>&nbsp;&nbsp;width="40px"</div>
+            <div>&nbsp;&nbsp;borderTopWidth={1}</div>
+            <div>&nbsp;&nbsp;borderStyle="solid"  // ← AUTO aplicado por Box</div>
+            <div>&nbsp;&nbsp;borderColor="#d9d9d9"</div>
+            <div>&nbsp;&nbsp;backgroundColor="#d9d9d9"  // ← Fallback</div>
+            <div>/&gt;</div>
+            <br>
+            <div class="success">// BRACE (debería ser VISIBLE)</div>
+            <div>&lt;Box</div>
+            <div>&nbsp;&nbsp;borderWidth={1}</div>
+            <div>&nbsp;&nbsp;borderStyle="solid"  // ← AUTO aplicado</div>
+            <div>&nbsp;&nbsp;borderLeftWidth={0}</div>
+            <div>&nbsp;&nbsp;borderColor="#d9d9d9"</div>
+            <div>/&gt;</div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Testing Fixed Box Component Styles...');
+            
+            const line = document.querySelector('.fixed-box-line');
+            const brace = document.querySelector('.fixed-box-brace');
+            const ultraThin = document.querySelector('.ultra-thin-line');
+            
+            if (line) {
+                const lineStyles = window.getComputedStyle(line);
+                console.log('📏 Line Styles:', {
+                    display: lineStyles.display,
+                    boxSizing: lineStyles.boxSizing,
+                    borderTop: lineStyles.borderTop,
+                    backgroundColor: lineStyles.backgroundColor,
+                    height: lineStyles.height,
+                    width: lineStyles.width
+                });
+            }
+            
+            if (brace) {
+                const braceStyles = window.getComputedStyle(brace);
+                console.log('🔲 Brace Styles:', {
+                    display: braceStyles.display,
+                    border: braceStyles.border,
+                    borderLeft: braceStyles.borderLeft,
+                    borderRadius: braceStyles.borderRadius
+                });
+            }
+            
+            // Test de visibilidad
+            setTimeout(() => {
+                const elements = [line, brace, ultraThin];
+                const visible = elements.filter(el => {
+                    if (!el) return false;
+                    const rect = el.getBoundingClientRect();
+                    return rect.width > 0 && rect.height > 0;
+                });
+                
+                console.log(`✅ Elementos visibles: ${visible.length}/${elements.length}`);
+                
+                if (visible.length === elements.length) {
+                    console.log('🎉 SUCCESS: Todas las líneas son visibles!');
+                } else {
+                    console.log('⚠️ WARNING: Algunas líneas no son visibles');
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

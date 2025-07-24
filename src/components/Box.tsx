@@ -57,43 +57,75 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(({
     style,
     ...props
 }, ref) => {
-    const baseClasses = 'block';
-
-    const positionClass = position ? `${position}` : '';
-
     const computedStyle: React.CSSProperties = {
+        display: 'block', // Chakra UI always sets display: block
+        boxSizing: 'border-box', // Chakra UI default
         ...style,
         width: typeof width === 'number' ? `${width}px` : width,
         height: typeof height === 'number' ? `${height}px` : height,
-        borderWidth: borderWidth ? `${borderWidth}px` : undefined,
-        borderTopWidth: borderTopWidth ? `${borderTopWidth}px` : undefined,
-        borderLeftWidth: borderLeftWidth ? `${borderLeftWidth}px` : undefined,
-        borderRightWidth: borderRightWidth ? `${borderRightWidth}px` : undefined,
-        borderBottomWidth: borderBottomWidth ? `${borderBottomWidth}px` : undefined,
-        borderStyle: borderStyle || (borderWidth || borderTopWidth || borderLeftWidth || borderRightWidth || borderBottomWidth) ? 'solid' : undefined,
+        
+        // Border handling - exact Chakra UI behavior
+        ...(borderWidth && {
+            borderWidth: `${borderWidth}px`,
+            borderStyle: borderStyle || 'solid',
+            borderColor: borderColor || 'currentColor',
+        }),
+        
+        // Individual border widths
+        ...(borderTopWidth && {
+            borderTopWidth: `${borderTopWidth}px`,
+            borderTopStyle: borderStyle || 'solid',
+            borderTopColor: borderColor || 'currentColor',
+        }),
+        ...(borderLeftWidth && {
+            borderLeftWidth: `${borderLeftWidth}px`,
+            borderLeftStyle: borderStyle || 'solid',
+            borderLeftColor: borderColor || 'currentColor',
+        }),
+        ...(borderRightWidth && {
+            borderRightWidth: `${borderRightWidth}px`,
+            borderRightStyle: borderStyle || 'solid',
+            borderRightColor: borderColor || 'currentColor',
+        }),
+        ...(borderBottomWidth && {
+            borderBottomWidth: `${borderBottomWidth}px`,
+            borderBottomStyle: borderStyle || 'solid',
+            borderBottomColor: borderColor || 'currentColor',
+        }),
+        
+        // Border radius
         borderTopRightRadius: borderTopRightRadius ? `${borderTopRightRadius}px` : undefined,
         borderBottomRightRadius: borderBottomRightRadius ? `${borderBottomRightRadius}px` : undefined,
         borderTopLeftRadius: borderTopLeftRadius ? `${borderTopLeftRadius}px` : undefined,
         borderBottomLeftRadius: borderBottomLeftRadius ? `${borderBottomLeftRadius}px` : undefined,
-        borderColor,
+        
+        // Background
         backgroundColor,
-        paddingLeft: px ? `${px * 4}px` : undefined, // Chakra uses 4px per unit
+        
+        // Spacing - Chakra UI behavior
+        paddingLeft: px ? `${px * 4}px` : undefined,
         paddingRight: px ? `${px * 4}px` : undefined,
         paddingTop: py ? `${py * 4}px` : undefined,
         paddingBottom: py ? `${py * 4}px` : undefined,
         gap: gap ? `${gap * 4}px` : undefined,
+        
+        // Layout
         position,
+        
+        // Typography
         color,
         fontSize,
         fontWeight,
         textAlign,
+        
+        // Interaction
         pointerEvents,
     };
 
     return (
         <div
             ref={ref}
-            className={`${baseClasses} ${positionClass} ${className}`}
+            className={className}
             style={computedStyle}
             {...props}
         >

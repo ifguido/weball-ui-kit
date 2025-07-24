@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔍 Análisis Chakra UI vs Custom Box</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        
+        .test-box {
+            border: 2px solid #ccc;
+            padding: 20px;
+            background: white;
+            min-height: 200px;
+            flex: 1;
+        }
+        
+        /* Simulamos el comportamiento de Chakra UI */
+        .chakra-box {
+            position: absolute;
+            width: 40px;
+            height: 1px;
+            border-top: 1px solid #d9d9d9;
+            background-color: #d9d9d9;
+            top: 50px;
+            left: 20px;
+        }
+        
+        /* Nuestro Box personalizado */
+        .custom-box {
+            position: absolute;
+            width: 40px;
+            height: 1px;
+            border-top-width: 1px;
+            border-style: solid;
+            border-color: #d9d9d9;
+            background-color: #d9d9d9;
+            top: 80px;
+            left: 20px;
+        }
+        
+        /* Test de braces */
+        .chakra-brace {
+            position: absolute;
+            width: 20px;
+            height: 60px;
+            border: 1px solid #d9d9d9;
+            border-left: none;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            top: 110px;
+            left: 20px;
+        }
+        
+        .custom-brace {
+            position: absolute;
+            width: 20px;
+            height: 60px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: #d9d9d9;
+            border-left-width: 0;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            top: 110px;
+            left: 60px;
+        }
+        
+        .debug-info {
+            font-family: monospace;
+            font-size: 12px;
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .problem {
+            color: #d73027;
+            font-weight: bold;
+        }
+        
+        .solution {
+            color: #1a9641;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Chakra UI vs Custom Box - Análisis de Líneas</h1>
+    
+    <div class="test-section">
+        <h2>🎯 Comportamiento Esperado (Chakra UI)</h2>
+        <div class="debug-info">
+            <div class="solution">✅ Chakra UI: border + backgroundColor = VISIBLE</div>
+            <div>- Aplica automáticamente border-style: solid</div>
+            <div>- Maneja correctamente height: 1px con borders</div>
+            <div>- backgroundColor funciona como fallback</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>⚠️ Problema Identificado</h2>
+        <div class="debug-info">
+            <div class="problem">❌ Custom Box Issues:</div>
+            <div>1. borderStyle puede ser undefined aunque haya borderWidth</div>
+            <div>2. backgroundColor puede no aplicarse correctamente</div>
+            <div>3. height="1px" + border puede crear box-sizing issues</div>
+            <div>4. position absolute puede necesitar display: block explícito</div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🧪 Visual Test</h2>
+        <div class="comparison-container">
+            <div class="test-box">
+                <h3>Chakra-like (Referencia)</h3>
+                <div style="position: relative; height: 200px;">
+                    <div class="chakra-box"></div>
+                    <div class="chakra-brace"></div>
+                    <span style="position: absolute; top: 180px; left: 0; font-size: 12px;">
+                        Si ves líneas aquí, el CSS es correcto
+                    </span>
+                </div>
+            </div>
+            
+            <div class="test-box">
+                <h3>Custom Box (Actual)</h3>
+                <div style="position: relative; height: 200px;">
+                    <div class="custom-box"></div>
+                    <div class="custom-brace"></div>
+                    <span style="position: absolute; top: 180px; left: 0; font-size: 12px;">
+                        Si NO ves líneas, hay que corregir
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔧 Solución Requerida</h2>
+        <div class="debug-info">
+            <div class="solution">✅ Box Component Fixes:</div>
+            <div>1. Asegurar borderStyle='solid' SIEMPRE que haya border</div>
+            <div>2. Aplicar display: block explícitamente</div>
+            <div>3. Manejar box-sizing correctamente</div>
+            <div>4. Garantizar backgroundColor se aplique</div>
+            <div>5. Agregar fallbacks para mejor compatibilidad</div>
+        </div>
+    </div>
+    
+    <script>
+        // Debug info
+        document.addEventListener('DOMContentLoaded', function() {
+            const chakraBox = document.querySelector('.chakra-box');
+            const customBox = document.querySelector('.custom-box');
+            
+            console.log('🔍 Chakra Box Computed Styles:');
+            if (chakraBox) {
+                const chakraStyles = window.getComputedStyle(chakraBox);
+                console.log('Border:', chakraStyles.border);
+                console.log('Border-top:', chakraStyles.borderTop);
+                console.log('Background:', chakraStyles.backgroundColor);
+                console.log('Display:', chakraStyles.display);
+                console.log('Height:', chakraStyles.height);
+            }
+            
+            console.log('🔍 Custom Box Computed Styles:');
+            if (customBox) {
+                const customStyles = window.getComputedStyle(customBox);
+                console.log('Border:', customStyles.border);
+                console.log('Border-top:', customStyles.borderTop);
+                console.log('Background:', customStyles.backgroundColor);
+                console.log('Display:', customStyles.display);
+                console.log('Height:', customStyles.height);
+            }
+        });
+    </script>
+</body>
+</html>
