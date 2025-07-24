@@ -11,11 +11,13 @@ export interface BoxProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'co
     borderLeftWidth?: number;
     borderRightWidth?: number;
     borderBottomWidth?: number;
+    borderStyle?: 'solid' | 'dashed' | 'dotted' | 'none';
     borderTopRightRadius?: number;
     borderBottomRightRadius?: number;
     borderTopLeftRadius?: number;
     borderBottomLeftRadius?: number;
     borderColor?: string;
+    backgroundColor?: string;
     px?: number;
     py?: number;
     gap?: number;
@@ -37,11 +39,13 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(({
     borderLeftWidth,
     borderRightWidth,
     borderBottomWidth,
+    borderStyle,
     borderTopRightRadius,
     borderBottomRightRadius,
     borderTopLeftRadius,
     borderBottomLeftRadius,
     borderColor,
+    backgroundColor,
     px,
     py,
     gap,
@@ -66,12 +70,13 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(({
         borderLeftWidth: borderLeftWidth ? `${borderLeftWidth}px` : undefined,
         borderRightWidth: borderRightWidth ? `${borderRightWidth}px` : undefined,
         borderBottomWidth: borderBottomWidth ? `${borderBottomWidth}px` : undefined,
-        borderStyle: (borderWidth || borderTopWidth || borderLeftWidth || borderRightWidth || borderBottomWidth) ? 'solid' : undefined,
+        borderStyle: borderStyle || (borderWidth || borderTopWidth || borderLeftWidth || borderRightWidth || borderBottomWidth) ? 'solid' : undefined,
         borderTopRightRadius: borderTopRightRadius ? `${borderTopRightRadius}px` : undefined,
         borderBottomRightRadius: borderBottomRightRadius ? `${borderBottomRightRadius}px` : undefined,
         borderTopLeftRadius: borderTopLeftRadius ? `${borderTopLeftRadius}px` : undefined,
         borderBottomLeftRadius: borderBottomLeftRadius ? `${borderBottomLeftRadius}px` : undefined,
         borderColor,
+        backgroundColor,
         paddingLeft: px ? `${px * 4}px` : undefined, // Chakra uses 4px per unit
         paddingRight: px ? `${px * 4}px` : undefined,
         paddingTop: py ? `${py * 4}px` : undefined,

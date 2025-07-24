@@ -405,6 +405,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
           }}
           position="absolute"
           borderWidth={1}
+          borderStyle="solid"
           borderTopRightRadius={6}
           borderBottomRightRadius={6}
           borderLeftWidth={0}
@@ -424,7 +425,9 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
           height="1px"
           width={FIXTURE_LINE_WIDTH + "px"}
           borderTopWidth={1}
+          borderStyle="solid"
           borderColor={WbColors.light.inputBorder}
+          backgroundColor={WbColors.light.inputBorder}
         />
       ))}
 

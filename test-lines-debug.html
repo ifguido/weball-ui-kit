@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Líneas de Fixture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .fixture-container {
+            border: 2px solid #e0e0e0;
+            padding: 20px;
+            margin: 10px 0;
+            position: relative;
+            height: 300px;
+            overflow: auto;
+        }
+        
+        .symmetrical-container {
+            border: 2px solid #e0e0e0;
+            padding: 20px;
+            margin: 10px 0;
+            position: relative;
+            /* SIN HEIGHT EXPLICITA PARA PROBAR */
+            overflow: auto;
+        }
+        
+        /* Simulamos las líneas como deberían verse */
+        .test-line {
+            position: absolute;
+            background-color: #d9d9d9;
+            border: 1px solid #d9d9d9;
+        }
+        
+        .horizontal-line {
+            height: 1px;
+            width: 40px;
+            top: 50px;
+            left: 100px;
+        }
+        
+        .vertical-line {
+            width: 1px;
+            height: 30px;
+            top: 35px;
+            left: 140px;
+        }
+        
+        .bracket {
+            position: absolute;
+            border: 1px solid #d9d9d9;
+            border-left: none;
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            width: 20px;
+            height: 60px;
+            top: 20px;
+            left: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Análisis de Problemas con Líneas de Fixture</h1>
+    
+    <div class="test-container">
+        <h2>📋 Problemas Identificados:</h2>
+        <ul>
+            <li><strong>Líneas no visibles:</strong> Faltan propiedades CSS críticas</li>
+            <li><strong>WbSymmetrical sin altura:</strong> El contenedor no tiene altura automática</li>
+            <li><strong>BorderStyle no aplicado automáticamente:</strong> Las líneas necesitan borderStyle explícito</li>
+        </ul>
+    </div>
+    
+    <div class="test-container">
+        <h2>🎯 Líneas de Referencia (Como deberían verse):</h2>
+        <div style="position: relative; height: 100px; border: 1px dashed #ccc; padding: 10px;">
+            <div class="test-line horizontal-line"></div>
+            <div class="test-line vertical-line"></div>
+            <div class="bracket"></div>
+            <span style="position: absolute; top: 10px; left: 10px; font-size: 12px; color: #666;">
+                Si no ves líneas aquí, hay problemas de CSS
+            </span>
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>🔧 WbFixture Container (Con altura fija):</h2>
+        <div class="fixture-container">
+            <div id="fixture-test" style="width: 100%; height: 100%; background: #f9f9f9; display: flex; align-items: center; justify-content: center;">
+                Fixture Component Here (300px height)
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>⚠️ WbFixtureSymmetrical Container (Sin altura):</h2>
+        <div class="symmetrical-container">
+            <div id="symmetrical-test" style="width: 100%; background: #fff3cd; border: 1px dashed #856404; padding: 20px; text-align: center;">
+                WbFixtureSymmetrical Component Here<br>
+                <small style="color: #856404;">⚠️ Sin height del padre - puede no mostrarse</small>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-container">
+        <h2>🐛 Problemas de CSS Detectados:</h2>
+        <div style="font-family: monospace; background: #f8f8f8; padding: 15px; border-radius: 4px;">
+            <div style="color: #d73027; margin: 5px 0;">❌ height="1px" sin borderStyle</div>
+            <div style="color: #d73027; margin: 5px 0;">❌ borderWidth sin borderStyle automático</div>
+            <div style="color: #d73027; margin: 5px 0;">❌ Container height: 'auto' no funciona sin contenido</div>
+            <div style="color: #1a9641; margin: 5px 0;">✅ Debería ser: height="1px" + borderStyle="solid"</div>
+            <div style="color: #1a9641; margin: 5px 0;">✅ Debería ser: minHeight definido para containers</div>
+        </div>
+    </div>
+    
+    <script>
+        // Test para verificar si los estilos se aplican correctamente
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔍 Testing CSS Line Visibility...');
+            
+            const testLine = document.querySelector('.horizontal-line');
+            if (testLine) {
+                const styles = window.getComputedStyle(testLine);
+                console.log('Line height:', styles.height);
+                console.log('Line border:', styles.border);
+                console.log('Line background:', styles.backgroundColor);
+            }
+            
+            const fixtureContainer = document.querySelector('.fixture-container');
+            const symmetricalContainer = document.querySelector('.symmetrical-container');
+            
+            console.log('Fixture container height:', fixtureContainer.offsetHeight);
+            console.log('Symmetrical container height:', symmetricalContainer.offsetHeight);
+        });
+    </script>
+</body>
+</html>

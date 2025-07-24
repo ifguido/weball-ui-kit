@@ -444,13 +444,14 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
         overflow: 'visible',
       }}
     >
-      <Box
-        position="relative"
+            <Box
         ref={containerRef}
+        position="relative"
         style={{
           transform: responsive ? `scale(${scale})` : undefined,
           transformOrigin: 'top left',
           width: responsive && scale < 1 ? `${fixtureWidth}px` : '100%',
+          minHeight: responsive ? '400px' : '600px', // Asegurar altura mínima
           height: 'auto',
           minWidth: responsive && scale < 1 ? `${fixtureWidth}px` : undefined,
           overflow: 'visible',
@@ -478,6 +479,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
             }}
             position="absolute"
             borderWidth={1}
+            borderStyle="solid"
             borderTopRightRadius={6}
             borderBottomRightRadius={6}
             borderLeftWidth={0}
@@ -494,6 +496,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
             }}
             position="absolute"
             borderWidth={1}
+            borderStyle="solid"
             borderTopLeftRadius={6}
             borderBottomLeftRadius={6}
             borderRightWidth={0}
@@ -510,10 +513,11 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
             }}
             position="absolute"
             width={FIXTURE_LINE_WIDTH + "px"}
-            height={1}
-            borderWidth={0}
+            height="1px"
             borderTopWidth={1}
+            borderStyle="solid"
             borderColor={WbColors.light.inputBorder}
+            backgroundColor={WbColors.light.inputBorder}
           />
         ))}
 
