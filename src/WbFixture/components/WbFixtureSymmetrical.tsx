@@ -33,7 +33,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
     onClickNode,
     onResultSaved,
     editMode = false,
-    responsive = false,
+    responsive = true,
     ...restProps
   } = props;
 
@@ -129,8 +129,15 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
       FIXTURE_SCROLL_SIZE;
 
     if (containerRef.current) {
-      containerRef.current.style.width = width + "px";
-      containerRef.current.style.height = height + "px";
+      // Solo establecer dimensiones fijas si no es responsive
+      if (!responsive) {
+        containerRef.current.style.width = width + "px";
+        containerRef.current.style.height = height + "px";
+      } else {
+        // En modo responsive, establecer mínimas dimensiones  
+        containerRef.current.style.minWidth = width + "px";
+        containerRef.current.style.minHeight = height + "px";
+      }
     }
 
     const auxLinesQuantity = 2 * (2 ** (stagesOnWing - 1) - 1);
@@ -429,15 +436,24 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
   if (!fixtureVisualizerRoot || !nodes.length) return;
 
   return (
-    <Box>
+    <Box
+      style={{
+        width: '100%',
+        height: 'auto',
+        minHeight: 'fit-content',
+        overflow: 'visible',
+      }}
+    >
       <Box
         position="relative"
         ref={containerRef}
         style={{
           transform: responsive ? `scale(${scale})` : undefined,
           transformOrigin: 'top left',
-          width: responsive && scale < 1 ? `${fixtureWidth}px` : undefined,
-          height: responsive && scale < 1 ? 'auto' : undefined,
+          width: responsive && scale < 1 ? `${fixtureWidth}px` : '100%',
+          height: 'auto',
+          minWidth: responsive && scale < 1 ? `${fixtureWidth}px` : undefined,
+          overflow: 'visible',
         }}
       >
         {nodes.map((node: WBFixtureNode, index: number) => (

@@ -112,9 +112,9 @@ export interface WbFixtureProps<
 
   /**
    * Enable responsive behavior
-   * When true, the fixture will scale to fit its container
-   * When false, uses fixed dimensions
-   * @default false
+   * When true, the fixture will scale to fit its container and occupy 100% width
+   * When false, uses fixed dimensions based on content
+   * @default true
    */
   responsive?: boolean;
 }

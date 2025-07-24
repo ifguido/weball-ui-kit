@@ -90,7 +90,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
     onClickNode,
     onResultSaved,
     editMode = false,
-    responsive = false,
+    responsive = true,
     ...restProps
   } = props;
   // Estado con la lista final de nodos a renderizar (partidos)
@@ -152,8 +152,15 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
       FIXTURE_SCROLL_SIZE;
 
     if (containerRef.current) {
-      containerRef.current.style.width = containerWidth + "px";
-      containerRef.current.style.height = containerHeight + "px";
+      // Solo establecer dimensiones fijas si no es responsive
+      if (!responsive) {
+        containerRef.current.style.width = containerWidth + "px";
+        containerRef.current.style.height = containerHeight + "px";
+      } else {
+        // En modo responsive, establecer mínimas dimensiones
+        containerRef.current.style.minWidth = containerWidth + "px";
+        containerRef.current.style.minHeight = containerHeight + "px";
+      }
     }
 
     // Cantidad de “llaves” (líneas)
@@ -362,8 +369,10 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
       style={{
         transform: responsive ? `scale(${scale})` : undefined,
         transformOrigin: 'top left',
-        width: responsive && scale < 1 ? `${fixtureWidth}px` : undefined,
-        height: responsive && scale < 1 ? 'auto' : undefined,
+        width: responsive && scale < 1 ? `${fixtureWidth}px` : '100%',
+        height: responsive && scale < 1 ? 'auto' : 'auto',
+        minWidth: responsive && scale < 1 ? `${fixtureWidth}px` : undefined,
+        overflow: 'visible',
       }}
     >
       {/* Render de cada partido (nodo) */}

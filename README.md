@@ -87,7 +87,7 @@ function App() {
 }
 ```
 
-### ✨ Nuevo: Con Diseño Responsivo
+### ✨ Nuevo: Diseño Responsivo por Defecto
 
 ```jsx
 import { WbFixture } from '@weball/ui-kit';
@@ -97,10 +97,26 @@ function App() {
     <div style={{ width: '100%', maxWidth: '800px' }}>
       <WbFixture 
         fixtureVisualizerRoot={data}
-        responsive={true}  // 🎉 Se adapta automáticamente al contenedor
+        // responsive={true} es el valor por defecto ahora 🎉
         editMode={true}
       />
     </div>
+  );
+}
+```
+
+### Uso con Dimensiones Fijas
+
+```jsx
+import { WbFixture } from '@weball/ui-kit';
+
+function App() {
+  return (
+    <WbFixture 
+      fixtureVisualizerRoot={data}
+      responsive={false}  // Desactiva responsive para usar dimensiones fijas
+      editMode={true}
+    />
   );
 }
 ```

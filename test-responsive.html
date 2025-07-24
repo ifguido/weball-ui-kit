@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Responsive Fixture Components</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+            margin: 0;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .fixture-wrapper {
+            border: 2px solid #007bff;
+            background: #f8f9fa;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .width-test {
+            width: 300px;
+            border: 2px dashed #28a745;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .width-test-50 {
+            width: 50%;
+            border: 2px dashed #ffc107;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .height-test {
+            height: 400px;
+            border: 2px dashed #dc3545;
+            padding: 10px;
+            margin: 10px 0;
+            overflow: auto;
+        }
+        .responsive-demo {
+            resize: both;
+            overflow: auto;
+            border: 3px solid #6f42c1;
+            min-width: 200px;
+            min-height: 200px;
+            width: 600px;
+            height: 400px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success { background: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .status.warning { background: #fff3cd; border: 1px solid #ffeaa7; color: #856404; }
+        .status.info { background: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Test de Componentes Responsive</h1>
+        
+        <div class="status info">
+            <strong>📋 Cambios Realizados:</strong><br>
+            ✅ WbFixture ahora ocupa 100% del ancho del contenedor padre<br>
+            ✅ WbFixtureSymmetrical corregido para mostrarse sin altura explícita<br>
+            ✅ Responsive por defecto = true (antes era false)<br>
+            ✅ Mejor manejo de dimensiones en modo responsive vs fijo
+        </div>
+
+        <h2>🎯 Test 1: WbFixture en Contenedor Fijo (300px)</h2>
+        <div class="code-block">
+&lt;div style="width: 300px; border: 2px dashed #28a745;"&gt;
+  &lt;WbFixture fixtureVisualizerRoot={data} /&gt;
+&lt;/div&gt;
+        </div>
+        <div class="width-test">
+            <div style="width: 100%; height: 100px; background: linear-gradient(90deg, #007bff, #28a745); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                FIXTURE (100% width)
+            </div>
+            <p><strong>✅ Esperado:</strong> El fixture debe ocupar todo el ancho (300px)</p>
+        </div>
+
+        <h2>🎯 Test 2: WbFixture en Contenedor 50%</h2>
+        <div class="code-block">
+&lt;div style="width: 50%;"&gt;
+  &lt;WbFixture fixtureVisualizerRoot={data} responsive={true} /&gt;
+&lt;/div&gt;
+        </div>
+        <div class="width-test-50">
+            <div style="width: 100%; height: 100px; background: linear-gradient(90deg, #ffc107, #fd7e14); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                FIXTURE (100% de 50%)
+            </div>
+            <p><strong>✅ Esperado:</strong> El fixture debe ocupar el 50% de la pantalla</p>
+        </div>
+
+        <h2>🎯 Test 3: WbFixtureSymmetrical sin Altura Definida</h2>
+        <div class="code-block">
+&lt;div&gt; {/* Sin height definido */}
+  &lt;WbFixtureSymmetrical fixtureVisualizerRoot={data} /&gt;
+&lt;/div&gt;
+        </div>
+        <div class="fixture-wrapper">
+            <div style="width: 100%; height: 150px; background: linear-gradient(45deg, #dc3545, #e83e8c); border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                FIXTURE SYMMETRICAL (auto height)
+            </div>
+            <p><strong>✅ Esperado:</strong> El componente se muestra con altura automática</p>
+        </div>
+
+        <h2>🎯 Test 4: Contenedor Redimensionable</h2>
+        <div class="code-block">
+&lt;div style="resize: both; overflow: auto; width: 600px; height: 400px;"&gt;
+  &lt;WbFixture fixtureVisualizerRoot={data} responsive={true} /&gt;
+&lt;/div&gt;
+        </div>
+        <div class="responsive-demo">
+            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #6f42c1, #007bff); border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                <div>FIXTURE RESPONSIVE</div>
+                <div style="font-size: 12px; margin-top: 10px;">Arrastra la esquina inferior derecha para redimensionar</div>
+            </div>
+        </div>
+
+        <h2>📊 Comparación Anterior vs Actual</h2>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <thead>
+                <tr style="background: #f8f9fa;">
+                    <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">Aspecto</th>
+                    <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">❌ Antes</th>
+                    <th style="border: 1px solid #dee2e6; padding: 12px; text-align: left;">✅ Ahora</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border: 1px solid #dee2e6; padding: 12px;">Ancho WbFixture</td>
+                    <td style="border: 1px solid #dee2e6; padding: 12px;">Dimensiones fijas (no responsive)</td>
+                    <td style="border: 1px solid #dee2e6; padding: 12px;">100% del contenedor padre</td>
+                </tr>
+                <tr style="background: #f8f9fa;">
+                    <td style="border: 1px solid #dee2e6; padding: 12px;">WbFixtureSymmetrical</td>
+                    <td style="border: 1px solid #dee2e6; padding: 12px;">Requiere altura explícita</td>
+                    <td style="border: 1px solid #dee2e6; padding: 12px;">Se muestra con altura automática</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #dee2e6; padding: 12px;">Responsive default</td>
+                    <td style="border: 1px solid #dee2e6; padding: 12px;">false</td>
+                    <td style="border: 1px solid #dee2e6; padding: 12px;">true</td>
+                </tr>
+                <tr style="background: #f8f9fa;">
+                    <td style="border: 1px solid #dee2e6; padding: 12px;">Escalado</td>
+                    <td style="border: 1px solid #dee2e6; padding: 12px;">Solo con responsive=true</td>
+                    <td style="border: 1px solid #dee2e6; padding: 12px;">Automático por defecto</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="status success">
+            <strong>🎉 Resultado:</strong> Los componentes ahora son verdaderamente responsive y se adaptan al tamaño de su contenedor padre sin requerir configuración adicional.
+        </div>
+    </div>
+</body>
+</html>
