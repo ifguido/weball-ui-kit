@@ -63,14 +63,14 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(({
         ...style,
         width: typeof width === 'number' ? `${width}px` : width,
         height: typeof height === 'number' ? `${height}px` : height,
-        
+
         // Border handling - exact Chakra UI behavior
         ...(borderWidth && {
             borderWidth: `${borderWidth}px`,
             borderStyle: borderStyle || 'solid',
             borderColor: borderColor || 'currentColor',
         }),
-        
+
         // Individual border widths
         ...(borderTopWidth && {
             borderTopWidth: `${borderTopWidth}px`,
@@ -92,32 +92,32 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(({
             borderBottomStyle: borderStyle || 'solid',
             borderBottomColor: borderColor || 'currentColor',
         }),
-        
+
         // Border radius
         borderTopRightRadius: borderTopRightRadius ? `${borderTopRightRadius}px` : undefined,
         borderBottomRightRadius: borderBottomRightRadius ? `${borderBottomRightRadius}px` : undefined,
         borderTopLeftRadius: borderTopLeftRadius ? `${borderTopLeftRadius}px` : undefined,
         borderBottomLeftRadius: borderBottomLeftRadius ? `${borderBottomLeftRadius}px` : undefined,
-        
+        borderLeft: 0,
         // Background
         backgroundColor,
-        
+
         // Spacing - Chakra UI behavior
         paddingLeft: px ? `${px * 4}px` : undefined,
         paddingRight: px ? `${px * 4}px` : undefined,
         paddingTop: py ? `${py * 4}px` : undefined,
         paddingBottom: py ? `${py * 4}px` : undefined,
         gap: gap ? `${gap * 4}px` : undefined,
-        
+
         // Layout
         position,
-        
+
         // Typography
         color,
         fontSize,
         fontWeight,
         textAlign,
-        
+
         // Interaction
         pointerEvents,
     };
