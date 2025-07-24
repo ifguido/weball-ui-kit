@@ -115,10 +115,12 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
 
   // Estado para responsive scaling
   const [scale, setScale] = useState<number>(1);
-  const [fixtureWidth, setFixtureWidth] = useState<number>(0);
+  const [isResponsiveActive, setIsResponsiveActive] = useState<boolean>(false);
   
-  // Ref para debouncing del scale
+  // Refs para debouncing y control
   const scaleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastCalculatedScale = useRef<number>(1);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
 
   // ------------------------------------------------------
   // useEffect: cuando cambia el fixtureVisualizerRoot
@@ -176,78 +178,86 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
   }, [fixtureVisualizerRoot]);
 
   // ------------------------------------------------------
-  // useEffect: responsive scaling
+  // useEffect: responsive scaling - SIMPLIFIED  
   // ------------------------------------------------------
   useEffect(() => {
-    if (!responsive || !containerRef.current) return;
+    if (!responsive) {
+      setScale(1);
+      setIsResponsiveActive(false);
+      return;
+    }
 
-    const updateScale = () => {
+    const calculateAndApplyScale = () => {
       const container = containerRef.current;
       if (!container) return;
 
+      // Get parent container dimensions
+      const parentElement = container.parentElement;
+      if (!parentElement) return;
+
+      const parentWidth = parentElement.clientWidth;
+      
       // Calculate total fixture width based on stages
-      const baseWidth = (rootStageNumberToShow * (FIXTURE_NODE_WIDTH + FIXTURE_BRACE_WIDTH)) + FIXTURE_WINNER_WIDTH;
-      setFixtureWidth(baseWidth);
+      const totalFixtureWidth = (rootStageNumberToShow * (FIXTURE_NODE_WIDTH + FIXTURE_BRACE_WIDTH)) + FIXTURE_WINNER_WIDTH;
 
-      // Get container width
-      const containerWidth = container.offsetWidth;
+      let newScale = 1;
+      let shouldBeResponsive = false;
 
-      if (containerWidth > 0 && baseWidth > containerWidth) {
-        // Calculate scale to fit
-        const newScale = containerWidth / baseWidth;
-        const finalScale = Math.min(newScale, 1); // Never scale larger than 100%
+      if (parentWidth > 0 && totalFixtureWidth > parentWidth) {
+        newScale = Math.max(0.3, Math.min(1, (parentWidth - 40) / totalFixtureWidth)); // 40px margin
+        shouldBeResponsive = true;
+      }
+
+      // Only update if there's a significant change (prevents render loops)
+      const scaleDifference = Math.abs(newScale - lastCalculatedScale.current);
+      if (scaleDifference > 0.01) {
+        lastCalculatedScale.current = newScale;
         
-        // Only update scale if the difference is significant (> 2%) to prevent flashing
-        if (Math.abs(scale - finalScale) > 0.02) {
-          // Clear existing timeout
-          if (scaleTimeoutRef.current) {
-            clearTimeout(scaleTimeoutRef.current);
-          }
-          
-          // Debounce scale updates to prevent rapid changes
-          scaleTimeoutRef.current = setTimeout(() => {
-            setScale(finalScale);
-          }, 50);
+        // Clear any existing timeout
+        if (scaleTimeoutRef.current) {
+          clearTimeout(scaleTimeoutRef.current);
         }
-      } else {
-        if (scale !== 1) {
-          // Clear existing timeout
-          if (scaleTimeoutRef.current) {
-            clearTimeout(scaleTimeoutRef.current);
-          }
-          
-          scaleTimeoutRef.current = setTimeout(() => {
-            setScale(1);
-          }, 50);
-        }
+
+        // Debounce the update
+        scaleTimeoutRef.current = setTimeout(() => {
+          setScale(newScale);
+          setIsResponsiveActive(shouldBeResponsive);
+        }, 50);
       }
     };
 
     // Initial calculation
-    updateScale();
+    calculateAndApplyScale();
 
-    // Set up resize observer with throttling
-    let resizeTimeout: NodeJS.Timeout | null = null;
-    const throttledUpdateScale = () => {
-      if (resizeTimeout) {
-        clearTimeout(resizeTimeout);
+    // Setup ResizeObserver with proper cleanup
+    if (containerRef.current) {
+      resizeObserverRef.current = new ResizeObserver(() => {
+        // Throttle resize events
+        if (scaleTimeoutRef.current) {
+          clearTimeout(scaleTimeoutRef.current);
+        }
+        scaleTimeoutRef.current = setTimeout(calculateAndApplyScale, 100);
+      });
+
+      // Observe the parent container, not the fixture itself
+      const parentElement = containerRef.current.parentElement;
+      if (parentElement) {
+        resizeObserverRef.current.observe(parentElement);
       }
-      resizeTimeout = setTimeout(updateScale, 100);
-    };
+    }
 
-    const resizeObserver = new ResizeObserver(throttledUpdateScale);
-    resizeObserver.observe(containerRef.current);
-
+    // Cleanup function
     return () => {
-      resizeObserver.disconnect();
+      if (resizeObserverRef.current) {
+        resizeObserverRef.current.disconnect();
+        resizeObserverRef.current = null;
+      }
       if (scaleTimeoutRef.current) {
         clearTimeout(scaleTimeoutRef.current);
-      }
-      if (resizeTimeout) {
-        clearTimeout(resizeTimeout);
+        scaleTimeoutRef.current = null;
       }
     };
-  }, [responsive, rootStageNumberToShow, scale]);
+  }, [responsive, rootStageNumberToShow]); // Removed scale from dependencies to prevent loops
 
   // ------------------------------------------------------
   // useEffect: posicionar y dibujar nodos/lines una vez
@@ -406,13 +416,12 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
       className="relative"
       ref={containerRef}
       style={{
-        transform: responsive ? `scale(${scale})` : undefined,
-        transformOrigin: 'top left',
-        width: responsive && scale < 1 ? `${fixtureWidth}px` : '100%',
-        height: responsive && scale < 1 ? 'auto' : 'auto',
-        minWidth: responsive && scale < 1 ? `${fixtureWidth}px` : undefined,
+        transform: responsive && isResponsiveActive ? `scale(${scale})` : undefined,
+        transformOrigin: 'top center', // Center the scaling
+        width: '100%',
+        height: 'auto',
         overflow: 'visible',
-        transition: responsive ? 'transform 0.2s ease-out' : undefined,
+        transition: responsive ? 'transform 0.3s ease-out' : undefined,
         willChange: responsive ? 'transform' : undefined,
       }}
     >
