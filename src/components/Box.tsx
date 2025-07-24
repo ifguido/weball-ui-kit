@@ -66,6 +66,7 @@ export const Box = forwardRef<HTMLDivElement, BoxProps>(({
         borderLeftWidth: borderLeftWidth ? `${borderLeftWidth}px` : undefined,
         borderRightWidth: borderRightWidth ? `${borderRightWidth}px` : undefined,
         borderBottomWidth: borderBottomWidth ? `${borderBottomWidth}px` : undefined,
+        borderStyle: (borderWidth || borderTopWidth || borderLeftWidth || borderRightWidth || borderBottomWidth) ? 'solid' : undefined,
         borderTopRightRadius: borderTopRightRadius ? `${borderTopRightRadius}px` : undefined,
         borderBottomRightRadius: borderBottomRightRadius ? `${borderBottomRightRadius}px` : undefined,
         borderTopLeftRadius: borderTopLeftRadius ? `${borderTopLeftRadius}px` : undefined,

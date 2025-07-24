@@ -413,6 +413,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
           }}
           position="absolute"
           height="1px"
+          width={FIXTURE_LINE_WIDTH + "px"}
           borderTopWidth={1}
           borderColor={WbColors.light.inputBorder}
         />

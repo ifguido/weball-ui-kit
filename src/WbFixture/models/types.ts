@@ -12,7 +12,7 @@ export const WbColors = {
         tint: tintColorLight,
         tabIconDefault: "#ccc",
         tabIconSelected: tintColorLight,
-        inputBorder: "#0000001F",
+        inputBorder: "#00000040",
         inputLabel: "#000",
         inputText: "#000000A1",
         helperText: "#000000DE",
@@ -36,7 +36,7 @@ export const WbColors = {
         tint: "#4DFFFF", // Adaptación del tintColorLight para dark mode
         tabIconDefault: "#666",
         tabIconSelected: "#4DFFFF", // Manteniendo el contraste para iconos seleccionados
-        inputBorder: "#FFFFFF1F",
+        inputBorder: "#FFFFFF40",
         inputLabel: "#FFF",
         inputText: "#FFFFFFB3",
         helperText: "#FFFFFFDE",
