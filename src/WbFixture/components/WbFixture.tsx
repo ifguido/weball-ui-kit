@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "../../components";
 import { useState, useRef, useEffect } from "react";
 
 import { WbFixtureNode } from "./WbFixtureNode";
@@ -82,6 +82,17 @@ const KEY_PREFIX = {
 export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
   props: WbFixtureProps<TFixtureData, TCupWinnerData>
 ) => {
+  const {
+    fixtureVisualizerRoot,
+    cupWinner,
+    cupLogo,
+    nodeSelected,
+    onClickNode,
+    onResultSaved,
+    editMode = false,
+    responsive = false,
+    ...restProps
+  } = props;
   // Estado con la lista final de nodos a renderizar (partidos)
   const [matches, setMatches] = useState<WBFixtureNode[]>([]);
   // Cantidad de líneas que se dibujan entre partidos
@@ -102,14 +113,18 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
   const refFinalStage = useRef<HTMLDivElement>(null);
   const refWinner = useRef<HTMLDivElement>(null);
 
+  // Estado para responsive scaling
+  const [scale, setScale] = useState<number>(1);
+  const [fixtureWidth, setFixtureWidth] = useState<number>(0);
+
   // ------------------------------------------------------
   // useEffect: cuando cambia el fixtureVisualizerRoot
   // ------------------------------------------------------
   useEffect(() => {
-    if (!props.fixtureVisualizerRoot) return;
+    if (!fixtureVisualizerRoot) return;
 
     // Interpretamos 'stages' como la cantidad de hijos directos de la raíz
-    const stages = props.fixtureVisualizerRoot.children.length;
+    const stages = fixtureVisualizerRoot.children.length;
     const maxChildren = 8;
 
     setRootStageNumberToShow(stages);
@@ -117,7 +132,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
 
     // Obtenemos y ordenamos los partidos
     const orderedMatches = getOrderedMatchesByParentChildrenCount(
-      props.fixtureVisualizerRoot,
+      fixtureVisualizerRoot,
       stages
     );
 
@@ -148,7 +163,45 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
     // Mapeamos los FixtureVisualizerMatch -> FixtureNode
     // (para que WbFixtureNode los reciba con la misma estructura esperada)
     setMatches(orderedMatches);
-  }, [props.fixtureVisualizerRoot]);
+  }, [fixtureVisualizerRoot]);
+
+  // ------------------------------------------------------
+  // useEffect: responsive scaling
+  // ------------------------------------------------------
+  useEffect(() => {
+    if (!responsive || !containerRef.current) return;
+
+    const updateScale = () => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      // Calculate total fixture width based on stages
+      const baseWidth = (rootStageNumberToShow * (FIXTURE_NODE_WIDTH + FIXTURE_BRACE_WIDTH)) + FIXTURE_WINNER_WIDTH;
+      setFixtureWidth(baseWidth);
+
+      // Get container width
+      const containerWidth = container.offsetWidth;
+
+      if (containerWidth > 0 && baseWidth > containerWidth) {
+        // Calculate scale to fit
+        const newScale = containerWidth / baseWidth;
+        setScale(Math.min(newScale, 1)); // Never scale larger than 100%
+      } else {
+        setScale(1);
+      }
+    };
+
+    // Initial calculation
+    updateScale();
+
+    // Set up resize observer
+    const resizeObserver = new ResizeObserver(updateScale);
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [responsive, rootStageNumberToShow]);
 
   // ------------------------------------------------------
   // useEffect: posicionar y dibujar nodos/lines una vez
@@ -303,7 +356,16 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
   // Render principal
   // ======================================================
   return (
-    <Box className="relative" ref={containerRef}>
+    <Box
+      className="relative"
+      ref={containerRef}
+      style={{
+        transform: responsive ? `scale(${scale})` : undefined,
+        transformOrigin: 'top left',
+        width: responsive && scale < 1 ? `${fixtureWidth}px` : undefined,
+        height: responsive && scale < 1 ? 'auto' : undefined,
+      }}
+    >
       {/* Render de cada partido (nodo) */}
       {matches.map((node: WBFixtureNode, index: number) => (
         <Box
@@ -317,10 +379,10 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
         >
           <WbFixtureNode
             match={node}
-            nodeSelected={props.nodeSelected?.id === node.id}
-            onClickMatch={props.onClickNode ?? (() => { })}
-            onResultSaved={props.onResultSaved ?? (() => { })}
-            editMode={props.editMode}
+            nodeSelected={nodeSelected?.id === node.id}
+            onClickMatch={onClickNode ?? (() => { })}
+            onResultSaved={onResultSaved ?? (() => { })}
+            editMode={editMode}
           />
         </Box>
       ))}
@@ -389,7 +451,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
         <WbAvatar
           borderColor={WbColors.light.inputBorder}
           size={FIXTURE_WINNER_STAGE_SIZE + "px"}
-          src={props.cupLogo || SRC_IMG}
+          src={cupLogo || SRC_IMG}
           new
         />
         <Text>Final</Text>
@@ -409,13 +471,13 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
         <WbAvatar
           borderColor={WbColors.light.inputBorder}
           size={FIXTURE_WINNER_HEIGHT + "px"}
-          src={props.cupWinner?.logo || SRC_IMG}
+          src={cupWinner?.logo || SRC_IMG}
           new
         />
         <Box>
           <Text fontWeight="bold">Campeón</Text>
           <Text fontSize="12px" color={WbColors.light.grey}>
-            {props.cupWinner?.name || "Aún no definido."}
+            {cupWinner?.name || "Aún no definido."}
           </Text>
         </Box>
       </Flex>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "../../components";
 import { useEffect, useRef, useState } from "react";
 import {
   FIXTURE_BRACE_WIDTH,
@@ -25,6 +25,18 @@ import { WbColors } from "../models/types";
 import { WbAvatar } from "../ui/WbAvatar";
 
 export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
+  const {
+    fixtureVisualizerRoot,
+    cupWinner,
+    cupLogo,
+    nodeSelected,
+    onClickNode,
+    onResultSaved,
+    editMode = false,
+    responsive = false,
+    ...restProps
+  } = props;
+
   const [nodes, setNodes] = useState<WBFixtureNode[]>([]);
   const [linesQuantity, setLinesQuantity] = useState<number>(0);
   const [startRootNodes, setStartRootNodes] = useState<number>(0);
@@ -40,19 +52,23 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
   const refFinalStage = useRef<HTMLDivElement>(null);
   const refWinner = useRef<HTMLDivElement>(null);
 
-  const stagesOnWing = props.fixtureVisualizerRoot?.children.length
-    ? props.fixtureVisualizerRoot?.children.length - 1
+  // Estado para responsive scaling
+  const [scale, setScale] = useState<number>(1);
+  const [fixtureWidth, setFixtureWidth] = useState<number>(0);
+
+  const stagesOnWing = fixtureVisualizerRoot?.children.length
+    ? fixtureVisualizerRoot?.children.length - 1
     : 0;
 
   useEffect(() => {
-    if (!props.fixtureVisualizerRoot) return;
+    if (!fixtureVisualizerRoot) return;
     /** Ordena los nodos ingresados por stageNumberFromFinal y seguido de parentRank */
     const sorted = getOrderedMatchesByParentChildrenCount(
-      props.fixtureVisualizerRoot,
-      props.fixtureVisualizerRoot.children.length
+      fixtureVisualizerRoot,
+      fixtureVisualizerRoot.children.length
     );
-    const stages = props.fixtureVisualizerRoot.children.length;
-    const totalExpectedNodes = 2 ** props.fixtureVisualizerRoot.children.length;
+    const stages = fixtureVisualizerRoot.children.length;
+    const totalExpectedNodes = 2 ** fixtureVisualizerRoot.children.length;
 
     setRootStageNumberToShow(stages);
 
@@ -120,7 +136,47 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
     const auxLinesQuantity = 2 * (2 ** (stagesOnWing - 1) - 1);
     setLinesQuantity(auxLinesQuantity);
     setNodes(sorted);
-  }, [props.fixtureVisualizerRoot, stagesOnWing]);
+  }, [fixtureVisualizerRoot, stagesOnWing]);
+
+  // ------------------------------------------------------
+  // useEffect: responsive scaling
+  // ------------------------------------------------------
+  useEffect(() => {
+    if (!responsive || !containerRef.current) return;
+
+    const updateScale = () => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      // Calculate total fixture width for symmetrical layout
+      const wingWidth = stagesOnWing * FIXTURE_NODE_WIDTH +
+        (stagesOnWing - 1) * (FIXTURE_LINE_WIDTH + FIXTURE_BRACE_WIDTH);
+      const baseWidth = wingWidth * 2 + FIXTURE_NODE_WIDTH; // Both wings plus center
+      setFixtureWidth(baseWidth);
+
+      // Get container width
+      const containerWidth = container.offsetWidth;
+
+      if (containerWidth > 0 && baseWidth > containerWidth) {
+        // Calculate scale to fit
+        const newScale = containerWidth / baseWidth;
+        setScale(Math.min(newScale, 1)); // Never scale larger than 100%
+      } else {
+        setScale(1);
+      }
+    };
+
+    // Initial calculation
+    updateScale();
+
+    // Set up resize observer
+    const resizeObserver = new ResizeObserver(updateScale);
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [responsive, stagesOnWing]);
 
   useEffect(() => {
     const middleNode = (nodes.length - 1) / 2;
@@ -370,11 +426,20 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
     }
   }, [refNodes.current, nodes]);
 
-  if (!props.fixtureVisualizerRoot || !nodes.length) return;
+  if (!fixtureVisualizerRoot || !nodes.length) return;
 
   return (
     <Box>
-      <Box position="relative" ref={containerRef}>
+      <Box
+        position="relative"
+        ref={containerRef}
+        style={{
+          transform: responsive ? `scale(${scale})` : undefined,
+          transformOrigin: 'top left',
+          width: responsive && scale < 1 ? `${fixtureWidth}px` : undefined,
+          height: responsive && scale < 1 ? 'auto' : undefined,
+        }}
+      >
         {nodes.map((node: WBFixtureNode, index: number) => (
           <Box
             key={index}
@@ -385,7 +450,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
             width={FIXTURE_NODE_WIDTH + "px"}
             height={FIXTURE_NODE_HEIGHT + "px"}
           >
-            <WbFixtureNode match={node} onClickMatch={props.onClickNode ?? (() => { })} onResultSaved={props.onResultSaved ?? (() => { })} editMode={props.editMode} />
+            <WbFixtureNode match={node} onClickMatch={onClickNode ?? (() => { })} onResultSaved={onResultSaved ?? (() => { })} editMode={editMode} />
           </Box>
         ))}
 
@@ -467,7 +532,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
           <WbAvatar
             borderColor={WbColors.light.inputBorder}
             size={`${FIXTURE_WINNER_STAGE_SIZE}px`}
-            src={props.cupLogo || SRC_IMG}
+            src={cupLogo || SRC_IMG}
             new
           />
           <Text>Final</Text>
@@ -485,13 +550,13 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
           <WbAvatar
             borderColor={WbColors.light.inputBorder}
             size={`${FIXTURE_WINNER_HEIGHT}px`}
-            src={props.cupWinner?.logo || SRC_IMG}
+            src={cupWinner?.logo || SRC_IMG}
             new
           />
           <Box>
             <Text fontWeight="bold">Campeón</Text>
             <Text style={{ fontSize: 12, color: WbColors.light.grey }}>
-              {props.cupWinner?.name || "Aún no definido."}
+              {cupWinner?.name || "Aún no definido."}
             </Text>
           </Box>
         </Flex>

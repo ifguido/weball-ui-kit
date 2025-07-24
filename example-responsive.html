@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weball UI Kit v2.0.0 - Responsive Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .feature-list {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .responsive-demo {
+            border: 2px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .version-badge {
+            background: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+        }
+        .breaking-changes {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏆 Weball UI Kit <span class="version-badge">v2.0.0</span></h1>
+        
+        <h2>🎉 Major Release - ChakraUI Free!</h2>
+        
+        <div class="feature-list">
+            <h3>✨ New Features in v2.0.0:</h3>
+            <ul>
+                <li><strong>Responsive Design:</strong> Add <code>responsive={true}</code> to automatically scale fixtures to fit containers</li>
+                <li><strong>Zero External Dependencies:</strong> No more ChakraUI or Emotion requirements</li>
+                <li><strong>Custom Component Library:</strong> Built-in Box, Flex, Text components with TailwindCSS</li>
+                <li><strong>Smaller Bundle Size:</strong> Significantly reduced package size</li>
+                <li><strong>Better Performance:</strong> Native CSS with optimized rendering</li>
+            </ul>
+        </div>
+
+        <div class="breaking-changes">
+            <h3>⚠️ Breaking Changes:</h3>
+            <ul>
+                <li><strong>Removed:</strong> <code>WeballUIProvider</code> - No longer needed!</li>
+                <li><strong>Removed:</strong> ChakraUI peer dependencies</li>
+                <li><strong>Updated:</strong> All components now use custom implementations</li>
+            </ul>
+        </div>
+
+        <h3>📦 Installation</h3>
+        <pre><code>npm install @weball/ui-kit@2.0.0</code></pre>
+
+        <h3>🚀 Usage Examples</h3>
+        
+        <h4>Basic Usage (same as before):</h4>
+        <pre><code>import { WbFixture, WbFixtureSymmetrical } from '@weball/ui-kit';
+
+// No provider needed anymore!
+&lt;WbFixture 
+  fixtureVisualizerRoot={data}
+  editMode={true}
+/&gt;</code></pre>
+
+        <h4>🎯 New Responsive Feature:</h4>
+        <div class="responsive-demo">
+            <pre><code>&lt;div style={{ width: '500px', border: '1px solid #ccc' }}&gt;
+  &lt;WbFixture 
+    fixtureVisualizerRoot={data}
+    editMode={true}
+    responsive={true}  // 🎉 NEW! Automatically scales to fit
+  /&gt;
+&lt;/div&gt;
+
+&lt;WbFixtureSymmetrical 
+  fixtureVisualizerRoot={data}
+  responsive={true}  // Works on both components!
+/&gt;</code></pre>
+        </div>
+
+        <h3>📋 Migration Guide v1.x → v2.0.0:</h3>
+        <ol>
+            <li>Remove ChakraUI dependencies from your package.json</li>
+            <li>Remove <code>WeballUIProvider</code> from your app root</li>
+            <li>Add <code>responsive={true}</code> where you want auto-scaling</li>
+            <li>Update to <code>@weball/ui-kit@2.0.0</code></li>
+        </ol>
+
+        <h3>🎮 Component Props:</h3>
+        <h4>WbFixture & WbFixtureSymmetrical:</h4>
+        <ul>
+            <li><code>fixtureVisualizerRoot</code> - Tournament data structure</li>
+            <li><code>cupWinner</code> - Winner information (optional)</li>
+            <li><code>editMode</code> - Enable score editing (default: false)</li>
+            <li><code>responsive</code> - <strong>NEW!</strong> Auto-scale to container (default: false)</li>
+            <li><code>onClickNode</code> - Click handler for matches</li>
+            <li><code>onResultSaved</code> - Save handler for score changes</li>
+        </ul>
+
+        <div class="feature-list">
+            <h3>💡 Benefits of v2.0.0:</h3>
+            <ul>
+                <li><strong>Faster Installation:</strong> No heavy UI library dependencies</li>
+                <li><strong>Better Bundle Size:</strong> ~70% smaller when including dependencies</li>
+                <li><strong>Responsive Out of the Box:</strong> Tournaments fit any screen size</li>
+                <li><strong>Future Proof:</strong> No dependency conflicts with your UI library choice</li>
+                <li><strong>Same API:</strong> Existing code mostly works without changes</li>
+            </ul>
+        </div>
+
+        <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; color: #666;">
+            <p>Made with ❤️ by the Weball Team | <a href="https://github.com/ifguido/weball-ui-kit">GitHub</a></p>
+        </footer>
+    </div>
+</body>
+</html>

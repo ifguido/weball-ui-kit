@@ -1,4 +1,4 @@
-import { Flex, Text, Image, Tooltip } from "@chakra-ui/react";
+import { Flex, Text, Image, Tooltip } from "../../components";
 import { FIXTURE_NODE_HEIGHT, FIXTURE_NODE_WIDTH } from "../constants/fixture-measures.constants";
 import { type FixtureVisualizerMatch, type TournamentMatch } from "../models/types";
 import { getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";

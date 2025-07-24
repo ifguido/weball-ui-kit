@@ -1,4 +1,4 @@
-import { Flex, Divider, Collapse } from "@chakra-ui/react";
+import { Flex, Divider, Collapse } from "../../components";
 import { Modal, InputNumber } from "antd";
 import React, { useState } from "react";
 import {

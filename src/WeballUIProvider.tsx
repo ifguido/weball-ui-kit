@@ -1,8 +1,22 @@
-import React from 'react';
-import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import React, { createContext, useContext } from 'react';
+
+// Tipo del tema
+interface WeballThemeType {
+    colors: {
+        weball: {
+            primary: string;
+            secondary: string;
+            darkGrey: string;
+            grey: string;
+            success: string;
+            warning: string;
+            error: string;
+        };
+    };
+}
 
 // Tema personalizado para Weball
-const weballTheme = extendTheme({
+const weballTheme: WeballThemeType = {
     colors: {
         weball: {
             primary: '#2EC7A6',
@@ -14,11 +28,15 @@ const weballTheme = extendTheme({
             error: '#ef5350',
         },
     },
-});
+};
+
+const WeballThemeContext = createContext<WeballThemeType>(weballTheme);
+
+export const useWeballTheme = () => useContext(WeballThemeContext);
 
 export interface WeballUIProviderProps {
     children: React.ReactNode;
-    theme?: Record<string, any>;
+    theme?: WeballThemeType;
 }
 
 /**
@@ -29,9 +47,9 @@ export const WeballUIProvider: React.FC<WeballUIProviderProps> = ({
     theme = weballTheme,
 }) => {
     return (
-        <ChakraProvider theme={theme}>
+        <WeballThemeContext.Provider value={theme}>
             {children}
-        </ChakraProvider>
+        </WeballThemeContext.Provider>
     );
 };
 

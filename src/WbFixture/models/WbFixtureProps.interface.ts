@@ -109,4 +109,12 @@ export interface WbFixtureProps<
    * @default false
    */
   editMode?: boolean;
+
+  /**
+   * Enable responsive behavior
+   * When true, the fixture will scale to fit its container
+   * When false, uses fixed dimensions
+   * @default false
+   */
+  responsive?: boolean;
 }

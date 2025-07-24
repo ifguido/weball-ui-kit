@@ -1,4 +1,4 @@
-import { Flex, Text, Image, Tooltip } from "@chakra-ui/react";
+import { Flex, Text, Image, Tooltip } from "../../components";
 import { type WBFixtureNode } from "../models/FixtureNode.interface";
 import { useMemo } from "react";
 import { getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";

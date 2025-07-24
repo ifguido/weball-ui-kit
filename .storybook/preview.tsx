@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react';
-import { ChakraProvider } from '@chakra-ui/react';
+import { WeballUIProvider } from '../src/WeballUIProvider';
 import React from 'react';
 
 const preview: Preview = {
@@ -14,9 +14,9 @@ const preview: Preview = {
     },
     decorators: [
         (Story) => (
-            <ChakraProvider>
+            <WeballUIProvider>
                 <Story />
-            </ChakraProvider>
+            </WeballUIProvider>
         ),
     ],
 };
