@@ -2,7 +2,7 @@ import { Flex, Text, Image } from "../../components";
 import { type WBFixtureNode } from "../models/FixtureNode.interface";
 import { useMemo } from "react";
 import { getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";
-import { WbTooltip } from "../ui/WbTooltip";
+import { Tooltip } from "antd";
 
 interface WbFixtureNodeTeamProps {
   local?: boolean;
@@ -85,9 +85,8 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
           />
         )}
 
-        <WbTooltip
+        <Tooltip
           title={getShortestNameClubInscription(club?.clubInscription) || vacancy?.name}
-          insideScaledContainer={true}
         >
           <Text
             className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
@@ -95,7 +94,7 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
           >
             {getShortestNameClubInscription(club?.clubInscription) || vacancy?.name || ""}
           </Text>
-        </WbTooltip>
+        </Tooltip>
       </Flex>
       <div
         className={`transition-all duration-400 w-[20px] flex justify-center ${editMode ? "hover:bg-gray-300 cursor-pointer" : "cursor-default"

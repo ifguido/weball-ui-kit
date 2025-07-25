@@ -1,4 +1,4 @@
-import { WbTooltip } from "../ui/WbTooltip";
+import { Tooltip } from "antd";
 import { Flex, Text, Image } from "../../components";
 import { FIXTURE_NODE_HEIGHT, FIXTURE_NODE_WIDTH } from "../constants/fixture-measures.constants";
 import { type FixtureVisualizerMatch, type TournamentMatch } from "../models/types";
@@ -130,17 +130,14 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
           )}
 
 
-          <WbTooltip
-            title={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
-            insideScaledContainer={true}
-          >
+          <Tooltip title={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}>
             <Text
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
               fontWeight="bold"
             >
               {getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
             </Text>
-          </WbTooltip>
+          </Tooltip>
         </Flex>
         <div
           className="  text-white  transition-all duration-400 w-[20px] flex justify-center gap-[2px] align-middle"
@@ -180,17 +177,14 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
             />
           )}
 
-          <WbTooltip
-            title={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
-            insideScaledContainer={true}
-          >
+          <Tooltip title={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}>
             <Text
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
               fontWeight="bold"
             >
               {getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
             </Text>
-          </WbTooltip>
+          </Tooltip>
         </Flex>
         <div
           className="  text-white  transition-all duration-400 w-[20px] flex justify-center gap-[2px] align-middle"
