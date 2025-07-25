@@ -55,8 +55,8 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
   // Estado para responsive scaling
   const [scale, setScale] = useState<number>(1);
   const [isResponsiveActive, setIsResponsiveActive] = useState<boolean>(false);
-  const [containerDimensions, setContainerDimensions] = useState<{width: number, height: number}>({width: 0, height: 0});
-  
+  const [containerDimensions, setContainerDimensions] = useState<{ width: number, height: number }>({ width: 0, height: 0 });
+
   // Refs para debouncing y control
   const scaleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastCalculatedScale = useRef<number>(1);
@@ -173,7 +173,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
       if (!parentElement) return;
 
       const parentWidth = parentElement.clientWidth;
-      
+
       // Calculate total fixture width for symmetrical layout
       const wingWidth = stagesOnWing * FIXTURE_NODE_WIDTH +
         Math.max(0, stagesOnWing - 1) * (FIXTURE_LINE_WIDTH + FIXTURE_BRACE_WIDTH);
@@ -191,7 +191,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
       const scaleDifference = Math.abs(newScale - lastCalculatedScale.current);
       if (scaleDifference > 0.01) {
         lastCalculatedScale.current = newScale;
-        
+
         // Clear any existing timeout
         if (scaleTimeoutRef.current) {
           clearTimeout(scaleTimeoutRef.current);
@@ -492,8 +492,8 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
     <Box
       style={{
         width: '100%',
-        height: responsive && isResponsiveActive 
-          ? `${containerDimensions.height * scale}px` 
+        height: responsive && isResponsiveActive
+          ? `${containerDimensions.height * scale}px`
           : 'auto',
         minHeight: 'fit-content',
         overflow: responsive && isResponsiveActive ? 'hidden' : 'visible',
@@ -506,11 +506,11 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
         style={{
           transform: responsive && isResponsiveActive ? `scale(${scale})` : undefined,
           transformOrigin: 'top center',
-          width: responsive && isResponsiveActive 
-            ? `${containerDimensions.width}px` 
+          width: responsive && isResponsiveActive
+            ? `${containerDimensions.width}px`
             : '100%',
-          height: responsive && isResponsiveActive 
-            ? `${containerDimensions.height}px` 
+          height: responsive && isResponsiveActive
+            ? `${containerDimensions.height}px`
             : 'auto',
           minHeight: responsive ? '400px' : '600px',
           overflow: 'visible',
@@ -642,7 +642,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
           />
           <Box>
             <Text fontWeight="bold">Campeón</Text>
-            <Text style={{ fontSize: 12, color: WbColors.light.grey }}>
+            <Text style={{ fontSize: 12, color: WbColors.light.grey, textWrap: "nowrap" }}>
               {cupWinner?.name || "Aún no definido."}
             </Text>
           </Box>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tooltip Fix Demo - Transform Scale Issues</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .test-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .demo-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+        }
+
+        .problem-demo {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .solution-demo {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .scaled-container {
+            width: 600px;
+            height: 300px;
+            background: linear-gradient(45deg, #e3f2fd, #bbdefb);
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            margin: 20px auto;
+            position: relative;
+            transform-origin: top center;
+            transition: transform 0.3s ease;
+        }
+
+        .scaled-container.scaled {
+            transform: scale(0.7);
+        }
+
+        .tooltip-test-element {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 15px 25px;
+            background: #2196f3;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .tooltip-test-element:hover {
+            background: #1976d2;
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .control-button {
+            margin: 5px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .control-button:hover {
+            background: #0056b3;
+        }
+
+        .info-panel {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        .code-block {
+            background: #263238;
+            color: #e8f5e8;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            color: #333;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        /* Custom tooltip styles for demo */
+        .custom-tooltip {
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .custom-tooltip.visible {
+            opacity: 1;
+        }
+
+        .custom-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #333;
+        }
+
+        .tournament-node {
+            width: 120px;
+            height: 60px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            cursor: pointer;
+            position: absolute;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .tournament-node:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
+        }
+
+        .tournament-node.node-1 { top: 50px; left: 50px; }
+        .tournament-node.node-2 { top: 150px; left: 50px; }
+        .tournament-node.node-3 { top: 100px; left: 250px; }
+        .tournament-node.node-4 { top: 100px; left: 450px; }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔧 Tooltip Fix: Transform Scale Issues</h1>
+        
+        <div class="info-panel">
+            <strong>PROBLEMA COMÚN:</strong><br>
+            Los tooltips de Ant Design no se posicionan correctamente cuando hay elementos con <code>transform: scale()</code>.
+            Esto causa que los tooltips aparezcan en posiciones incorrectas o fuera de la pantalla.
+        </div>
+
+        <div class="demo-section problem-demo">
+            <h3 class="error">❌ PROBLEMA: Tooltips mal posicionados</h3>
+            <p>Container escalado con <code>transform: scale(0.7)</code> - Los tooltips aparecen en posiciones incorrectas</p>
+            
+            <div class="scaled-container scaled" id="problemContainer">
+                <div class="tournament-node node-1" data-tooltip="Team Alpha vs Team Beta">
+                    Match 1<br>Alpha vs Beta
+                </div>
+                <div class="tournament-node node-2" data-tooltip="Team Gamma vs Team Delta">
+                    Match 2<br>Gamma vs Delta
+                </div>
+                <div class="tournament-node node-3" data-tooltip="Winner Match 1 vs Winner Match 2">
+                    Semi Final<br>Winner vs Winner
+                </div>
+                <div class="tournament-node node-4" data-tooltip="Final Championship Match">
+                    🏆 Final<br>Championship
+                </div>
+            </div>
+            
+            <div class="code-block">
+// ❌ PROBLEMA CON ANT DESIGN TOOLTIP
+import { Tooltip } from "antd";
+
+&lt;Tooltip title="Mi tooltip"&gt;
+  &lt;div style={{ transform: 'scale(0.7)' }}&gt;
+    Contenido escalado
+  &lt;/div&gt;
+&lt;/Tooltip&gt;
+
+// ❌ El tooltip aparece en posición incorrecta
+// porque Ant Design calcula posición basándose en elemento escalado
+            </div>
+        </div>
+
+        <div class="demo-section solution-demo">
+            <h3 class="success">✅ SOLUCIÓN: WbTooltip personalizado</h3>
+            <p>Mismo container escalado - Los tooltips se posicionan correctamente usando document.body</p>
+            
+            <div class="scaled-container scaled" id="solutionContainer">
+                <div class="tournament-node node-1" data-tooltip-fixed="Team Alpha vs Team Beta">
+                    Match 1<br>Alpha vs Beta
+                </div>
+                <div class="tournament-node node-2" data-tooltip-fixed="Team Gamma vs Team Delta">
+                    Match 2<br>Gamma vs Delta
+                </div>
+                <div class="tournament-node node-3" data-tooltip-fixed="Winner Match 1 vs Winner Match 2">
+                    Semi Final<br>Winner vs Winner
+                </div>
+                <div class="tournament-node node-4" data-tooltip-fixed="Final Championship Match">
+                    🏆 Final<br>Championship
+                </div>
+            </div>
+            
+            <div class="code-block">
+// ✅ SOLUCIÓN CON WbTooltip
+import { WbTooltip } from "../ui/WbTooltip";
+
+&lt;WbTooltip 
+  title="Mi tooltip"
+  <span class="highlight">insideScaledContainer={true}</span>
+&gt;
+  &lt;div style={{ transform: 'scale(0.7)' }}&gt;
+    Contenido escalado
+  &lt;/div&gt;
+&lt;/WbTooltip&gt;
+
+// ✅ Automáticamente detecta transform: scale() y usa document.body
+// ✅ Posicionamiento correcto independiente del scaling
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="control-button" onclick="toggleScale()">Toggle Scale (0.7 ↔ 1.0)</button>
+            <button class="control-button" onclick="toggleTooltips()">Toggle Tooltips</button>
+            <button class="control-button" onclick="animateScale()">Animate Scale</button>
+        </div>
+
+        <div class="info-panel">
+            <strong>CAMBIOS TÉCNICOS EN WbTooltip:</strong><br><br>
+            
+            <strong>1. Auto-detección de scaling:</strong><br>
+            <code>if (transform && transform.includes('scale')) return document.body;</code><br><br>
+            
+            <strong>2. Container inteligente:</strong><br>
+            <code>insideScaledContainer={true}</code> - Fuerza usar document.body<br><br>
+            
+            <strong>3. Z-index alto:</strong><br>
+            <code>overlayStyle={{ zIndex: 9999 }}</code><br><br>
+            
+            <strong>4. Configuración optimizada:</strong><br>
+            • mouseEnterDelay: 0.3s (más rápido)<br>
+            • mouseLeaveDelay: 0.1s<br>
+            • placement: top (por defecto)
+        </div>
+
+        <div class="info-panel">
+            <strong>CÓMO USAR EN TU CÓDIGO:</strong><br><br>
+            
+            <strong>1. Reemplazar imports:</strong><br>
+            <code>// import { Tooltip } from "antd"; // ❌ Remover</code><br>
+            <code>import { WbTooltip } from "../ui/WbTooltip"; // ✅ Usar</code><br><br>
+            
+            <strong>2. Actualizar componentes:</strong><br>
+            <code>&lt;WbTooltip title="..." insideScaledContainer={true}&gt;</code><br><br>
+            
+            <strong>3. Para elementos NO escalados (opcional):</strong><br>
+            <code>&lt;WbTooltip title="..." /&gt; // Auto-detecta scaling</code>
+        </div>
+    </div>
+
+    <div class="custom-tooltip" id="customTooltip"></div>
+
+    <script>
+        let isScaled = true;
+        let tooltipsEnabled = true;
+        let currentScale = 0.7;
+
+        function toggleScale() {
+            const containers = document.querySelectorAll('.scaled-container');
+            isScaled = !isScaled;
+            currentScale = isScaled ? 0.7 : 1.0;
+            
+            containers.forEach(container => {
+                if (isScaled) {
+                    container.style.transform = `scale(${currentScale})`;
+                } else {
+                    container.style.transform = 'scale(1)';
+                }
+            });
+            
+            console.log(`Scale changed to: ${currentScale}`);
+        }
+
+        function toggleTooltips() {
+            tooltipsEnabled = !tooltipsEnabled;
+            console.log(`Tooltips ${tooltipsEnabled ? 'enabled' : 'disabled'}`);
+        }
+
+        function animateScale() {
+            const scales = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0];
+            let index = 0;
+            
+            const animate = () => {
+                if (index < scales.length) {
+                    currentScale = scales[index];
+                    
+                    const containers = document.querySelectorAll('.scaled-container');
+                    containers.forEach(container => {
+                        container.style.transform = `scale(${currentScale})`;
+                    });
+                    
+                    console.log(`Animation step ${index + 1}: scale(${currentScale})`);
+                    
+                    index++;
+                    setTimeout(animate, 400);
+                } else {
+                    console.log('Scale animation completed!');
+                    isScaled = currentScale < 1;
+                }
+            };
+            
+            console.log('Starting scale animation...');
+            animate();
+        }
+
+        // Tooltip functionality for demo
+        const tooltip = document.getElementById('customTooltip');
+        
+        // Problem container - incorrect positioning (simulated)
+        document.querySelectorAll('#problemContainer .tournament-node').forEach(node => {
+            node.addEventListener('mouseenter', (e) => {
+                if (!tooltipsEnabled) return;
+                
+                const text = e.target.dataset.tooltip;
+                tooltip.textContent = text + ' (❌ Mal posicionado)';
+                tooltip.className = 'custom-tooltip visible';
+                
+                // Simulate incorrect positioning due to scale
+                const rect = e.target.getBoundingClientRect();
+                const scaledX = rect.left / currentScale; // Incorrect calculation
+                const scaledY = rect.top / currentScale; // Incorrect calculation
+                
+                tooltip.style.left = scaledX + 'px';
+                tooltip.style.top = (scaledY - 40) + 'px';
+            });
+            
+            node.addEventListener('mouseleave', () => {
+                tooltip.className = 'custom-tooltip';
+            });
+        });
+
+        // Solution container - correct positioning
+        document.querySelectorAll('#solutionContainer .tournament-node').forEach(node => {
+            node.addEventListener('mouseenter', (e) => {
+                if (!tooltipsEnabled) return;
+                
+                const text = e.target.dataset.tooltipFixed;
+                tooltip.textContent = text + ' (✅ Bien posicionado)';
+                tooltip.className = 'custom-tooltip visible';
+                
+                // Correct positioning using actual screen coordinates
+                const rect = e.target.getBoundingClientRect();
+                tooltip.style.left = (rect.left + rect.width / 2) + 'px';
+                tooltip.style.top = (rect.top - 40) + 'px';
+            });
+            
+            node.addEventListener('mouseleave', () => {
+                tooltip.className = 'custom-tooltip';
+            });
+        });
+
+        console.log('Tooltip Fix Demo loaded. Hover over tournament nodes to see the difference!');
+    </script>
+</body>
+</html>

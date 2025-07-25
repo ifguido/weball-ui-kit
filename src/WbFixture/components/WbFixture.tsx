@@ -116,8 +116,8 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
   // Estado para responsive scaling
   const [scale, setScale] = useState<number>(1);
   const [isResponsiveActive, setIsResponsiveActive] = useState<boolean>(false);
-  const [containerDimensions, setContainerDimensions] = useState<{width: number, height: number}>({width: 0, height: 0});
-  
+  const [containerDimensions, setContainerDimensions] = useState<{ width: number, height: number }>({ width: 0, height: 0 });
+
   // Refs para debouncing y control
   const scaleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastCalculatedScale = useRef<number>(1);
@@ -200,7 +200,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
       if (!parentElement) return;
 
       const parentWidth = parentElement.clientWidth;
-      
+
       // Calculate total fixture width based on stages
       const totalFixtureWidth = (rootStageNumberToShow * (FIXTURE_NODE_WIDTH + FIXTURE_BRACE_WIDTH)) + FIXTURE_WINNER_WIDTH;
 
@@ -216,7 +216,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
       const scaleDifference = Math.abs(newScale - lastCalculatedScale.current);
       if (scaleDifference > 0.01) {
         lastCalculatedScale.current = newScale;
-        
+
         // Clear any existing timeout
         if (scaleTimeoutRef.current) {
           clearTimeout(scaleTimeoutRef.current);
@@ -419,8 +419,8 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
     <Box
       style={{
         width: '100%',
-        height: responsive && isResponsiveActive 
-          ? `${containerDimensions.height * scale}px` 
+        height: responsive && isResponsiveActive
+          ? `${containerDimensions.height * scale}px`
           : 'auto',
         minHeight: 'fit-content',
         overflow: responsive && isResponsiveActive ? 'hidden' : 'visible',
@@ -433,142 +433,144 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
         style={{
           transform: responsive && isResponsiveActive ? `scale(${scale})` : undefined,
           transformOrigin: 'top center',
-          width: responsive && isResponsiveActive 
-            ? `${containerDimensions.width}px` 
+          width: responsive && isResponsiveActive
+            ? `${containerDimensions.width}px`
             : '100%',
-          height: responsive && isResponsiveActive 
-            ? `${containerDimensions.height}px` 
+          height: responsive && isResponsiveActive
+            ? `${containerDimensions.height}px`
             : 'auto',
           overflow: 'visible',
           transition: responsive ? 'transform 0.3s ease-out' : undefined,
           willChange: responsive ? 'transform' : undefined,
         }}
       >
-      {/* Render de cada partido (nodo) */}
-      {matches.map((node: WBFixtureNode, index: number) => (
-        <Box
-          key={index}
-          ref={(el: any) => {
-            if (el) refmatches.current[index] = el;
-          }}
-          position="absolute"
-          width={FIXTURE_NODE_WIDTH + "px"}
-          height={FIXTURE_NODE_HEIGHT + "px"}
-          backgroundColor={WbColors.light.backgroundGrey}
-          borderTopLeftRadius={12}
-          borderTopRightRadius={12}
-          borderBottomRightRadius={12}
-          borderBottomLeftRadius={12}
+        {/* Render de cada partido (nodo) */}
+        {matches.map((node: WBFixtureNode, index: number) => (
+          <Box
+            key={index}
+            ref={(el: any) => {
+              if (el) refmatches.current[index] = el;
+            }}
+            position="absolute"
+            width={FIXTURE_NODE_WIDTH + "px"}
+            height={FIXTURE_NODE_HEIGHT + "px"}
+            backgroundColor={WbColors.light.backgroundGrey}
+            borderTopLeftRadius={12}
+            borderTopRightRadius={12}
+            borderBottomRightRadius={12}
+            borderBottomLeftRadius={12}
 
-        >
-          <WbFixtureNode
-            match={node}
-            nodeSelected={nodeSelected?.id === node.id}
-            onClickMatch={onClickNode ?? (() => { })}
-            onResultSaved={onResultSaved ?? (() => { })}
-            editMode={editMode}
+          >
+            <WbFixtureNode
+              match={node}
+              nodeSelected={nodeSelected?.id === node.id}
+              onClickMatch={onClickNode ?? (() => { })}
+              onResultSaved={onResultSaved ?? (() => { })}
+              editMode={editMode}
+            />
+          </Box>
+        ))}
+
+        {/* Render “braces” verticales */}
+        {[...Array(linesQuantity)].map((_, index: number) => (
+          <Box
+            key={`${KEY_PREFIX.BRACE}${index}`}
+            ref={(el: any) => {
+              if (el) refBraces.current[index] = el;
+            }}
+            position="absolute"
+            borderWidth={1}
+            borderStyle="solid"
+            borderTopRightRadius={6}
+            borderBottomRightRadius={6}
+            borderLeftWidth={0}
+            width={FIXTURE_BRACE_WIDTH + "px"}
+            borderColor={WbColors.light.inputBorder}
           />
-        </Box>
-      ))}
+        ))}
 
-      {/* Render “braces” verticales */}
-      {[...Array(linesQuantity)].map((_, index: number) => (
-        <Box
-          key={`${KEY_PREFIX.BRACE}${index}`}
-          ref={(el: any) => {
-            if (el) refBraces.current[index] = el;
-          }}
-          position="absolute"
-          borderWidth={1}
-          borderStyle="solid"
-          borderTopRightRadius={6}
-          borderBottomRightRadius={6}
-          borderLeftWidth={0}
-          width={FIXTURE_BRACE_WIDTH + "px"}
-          borderColor={WbColors.light.inputBorder}
-        />
-      ))}
+        {/* Render líneas horizontales */}
+        {[...Array(linesQuantity)].map((_, index: number) => (
+          <Box
+            key={`${KEY_PREFIX.LINE}${index}`}
+            ref={(el: any) => {
+              if (el) refLines.current[index] = el;
+            }}
+            position="absolute"
+            height="1px"
+            width={FIXTURE_LINE_WIDTH + "px"}
+            borderTopWidth={1}
+            borderStyle="solid"
+            borderColor={WbColors.light.inputBorder}
+            backgroundColor={WbColors.light.inputBorder}
+          />
+        ))}
 
-      {/* Render líneas horizontales */}
-      {[...Array(linesQuantity)].map((_, index: number) => (
-        <Box
-          key={`${KEY_PREFIX.LINE}${index}`}
-          ref={(el: any) => {
-            if (el) refLines.current[index] = el;
-          }}
-          position="absolute"
-          height="1px"
-          width={FIXTURE_LINE_WIDTH + "px"}
-          borderTopWidth={1}
-          borderStyle="solid"
-          borderColor={WbColors.light.inputBorder}
-          backgroundColor={WbColors.light.inputBorder}
-        />
-      ))}
+        {/* Texto de etapas intermedias */}
+        {[...Array(stagesTextQuantity)].map((_, index: number) => (
+          <Text
+            key={`${KEY_PREFIX.STAGE}${index}`}
+            ref={(el: any) => {
+              if (el) refStages.current[index] = el;
+            }}
+            pointerEvents="none"
+            position="absolute"
+            textAlign="center"
+            width={FIXTURE_NODE_WIDTH + "px"}
+            fontSize={FIXTURE_STAGE_SIZE + "px"}
+            fontWeight={600}
+            color={WbColors.light.darkGrey}
+            px={1}
+          />
+        ))}
 
-      {/* Texto de etapas intermedias */}
-      {[...Array(stagesTextQuantity)].map((_, index: number) => (
-        <Text
-          key={`${KEY_PREFIX.STAGE}${index}`}
-          ref={(el: any) => {
-            if (el) refStages.current[index] = el;
-          }}
-          pointerEvents="none"
+        {/* Etapa Final */}
+        <Flex
+          ref={refFinalStage}
           position="absolute"
-          textAlign="center"
-          width={FIXTURE_NODE_WIDTH + "px"}
-          fontSize={FIXTURE_STAGE_SIZE + "px"}
-          fontWeight={600}
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
           color={WbColors.light.darkGrey}
-          px={1}
-        />
-      ))}
+          fontWeight={600}
+          gap={1}
+          width={FIXTURE_NODE_WIDTH + "px"}
+        >
+          <WbAvatar
+            borderColor={WbColors.light.inputBorder}
+            size={FIXTURE_WINNER_STAGE_SIZE + "px"}
+            src={cupLogo || SRC_IMG}
+            new
+          />
+          <Text>Final</Text>
+        </Flex>
 
-      {/* Etapa Final */}
-      <Flex
-        ref={refFinalStage}
-        position="absolute"
-        direction="row"
-        alignItems="center"
-        justifyContent="center"
-        color={WbColors.light.darkGrey}
-        fontWeight={600}
-        gap={1}
-        width={FIXTURE_NODE_WIDTH + "px"}
-      >
-        <WbAvatar
-          borderColor={WbColors.light.inputBorder}
-          size={FIXTURE_WINNER_STAGE_SIZE + "px"}
-          src={cupLogo || SRC_IMG}
-          new
-        />
-        <Text>Final</Text>
-      </Flex>
-
-      {/* Ganador */}
-      <Flex
-        ref={refWinner}
-        position="absolute"
-        direction="row"
-        alignItems="center"
-        justifyContent="center"
-        gap={1}
-        width={FIXTURE_WINNER_WIDTH + "px"}
-        height={FIXTURE_WINNER_HEIGHT + "px"}
-      >
-        <WbAvatar
-          borderColor={WbColors.light.inputBorder}
-          size={FIXTURE_WINNER_HEIGHT + "px"}
-          src={cupWinner?.logo || SRC_IMG}
-          new
-        />
-        <Box>
-          <Text fontWeight="bold">Campeón</Text>
-          <Text fontSize="12px" color={WbColors.light.grey}>
-            {cupWinner?.name || "Aún no definido."}
-          </Text>
-        </Box>
-      </Flex>
+        {/* Ganador */}
+        <Flex
+          ref={refWinner}
+          position="absolute"
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          gap={1}
+          width={FIXTURE_WINNER_WIDTH + "px"}
+          height={FIXTURE_WINNER_HEIGHT + "px"}
+        >
+          <WbAvatar
+            borderColor={WbColors.light.inputBorder}
+            size={FIXTURE_WINNER_HEIGHT + "px"}
+            src={cupWinner?.logo || SRC_IMG}
+            new
+          />
+          <Box>
+            <Text fontWeight="bold">Campeón</Text>
+            <Text style={{
+              textWrap: "nowrap"
+            }} fontSize="12px" color={WbColors.light.grey}>
+              {cupWinner?.name || "Aún no definido."}
+            </Text>
+          </Box>
+        </Flex>
       </Box>
     </Box>
   );

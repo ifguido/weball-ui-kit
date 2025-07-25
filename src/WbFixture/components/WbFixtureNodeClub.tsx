@@ -2,7 +2,7 @@ import { Flex, Text, Image } from "../../components";
 import { type WBFixtureNode } from "../models/FixtureNode.interface";
 import { useMemo } from "react";
 import { getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";
-import { Tooltip } from "antd";
+import { WbTooltip } from "../ui/WbTooltip";
 
 interface WbFixtureNodeTeamProps {
   local?: boolean;
@@ -65,7 +65,7 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
         alignItems="center"
         className=" flex-1 max-w-[80%] hover:bg-gray-300  transition-all duration-400 "
         gap={2}
-        onClick={() => onClickMatch(match, local ? "local" : "visit")}
+        onClick={editMode ? () => onClickMatch(match, local ? "local" : "visit") : undefined}
       >
         {club?.clubInscription?.logo ? (
           <>
@@ -85,14 +85,17 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
           />
         )}
 
-        <Tooltip title={getShortestNameClubInscription(club?.clubInscription) || vacancy?.name}>
+        <WbTooltip
+          title={getShortestNameClubInscription(club?.clubInscription) || vacancy?.name}
+          insideScaledContainer={true}
+        >
           <Text
             className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
             fontWeight="bold"
           >
             {getShortestNameClubInscription(club?.clubInscription) || vacancy?.name || ""}
           </Text>
-        </Tooltip>
+        </WbTooltip>
       </Flex>
       <div
         className={`transition-all duration-400 w-[20px] flex justify-center ${editMode ? "hover:bg-gray-300 cursor-pointer" : "cursor-default"

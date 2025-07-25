@@ -45,6 +45,13 @@ export const WbFixtureNode = React.forwardRef<
     setShowDetails((prev) => !prev);
   };
 
+  const handleContainerClick = () => {
+    // Only trigger expandable when not in edit mode
+    if (!editMode) {
+      setShowDetails((prev) => !prev);
+    }
+  };
+
   const [editingResult, setEditingResult] = useState<{
     position: "resultLocal" | "resultVisit";
     visible: boolean;
@@ -64,6 +71,7 @@ export const WbFixtureNode = React.forwardRef<
           borderRadius={12}
           width={FIXTURE_NODE_WIDTH + "px"}
           height={FIXTURE_NODE_HEIGHT + "px"}
+          onClick={handleContainerClick}
           style={{
             backgroundColor: nodeSelected
               ? "gray"
