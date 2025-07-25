@@ -87,6 +87,10 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
 
         <Tooltip
           title={getShortestNameClubInscription(club?.clubInscription) || vacancy?.name}
+          getPopupContainer={() => document.body}
+          mouseEnterDelay={0.5}
+          placement="top"
+          styles={{ root: { zIndex: 9999 } }}
         >
           <Text
             className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "

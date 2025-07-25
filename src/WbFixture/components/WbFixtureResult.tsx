@@ -130,7 +130,13 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
           )}
 
 
-          <Tooltip title={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}>
+          <Tooltip
+            title={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
+            getPopupContainer={() => document.body}
+            mouseEnterDelay={0.5}
+            placement="top"
+            styles={{ root: { zIndex: 9999 } }}
+          >
             <Text
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
               fontWeight="bold"
@@ -177,7 +183,13 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
             />
           )}
 
-          <Tooltip title={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}>
+          <Tooltip
+            title={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
+            getPopupContainer={() => document.body}
+            mouseEnterDelay={0.5}
+            placement="top"
+            styles={{ root: { zIndex: 9999 } }}
+          >
             <Text
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
               fontWeight="bold"
