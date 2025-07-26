@@ -131,7 +131,7 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
 
 
           <Tooltip
-            title={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
+            title={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription, 200) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
             getPopupContainer={() => document.body}
             mouseEnterDelay={0.5}
             placement="top"
@@ -184,7 +184,7 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
           )}
 
           <Tooltip
-            title={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
+            title={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription, 200) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
             getPopupContainer={() => document.body}
             mouseEnterDelay={0.5}
             placement="top"

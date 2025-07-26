@@ -63,7 +63,7 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
       <Flex
         direction="row"
         alignItems="center"
-        className=" flex-1 max-w-[80%] hover:bg-gray-300  transition-all duration-400 "
+        className="flex-1 max-w-[80%] hover:bg-gray-300  transition-all duration-400"
         gap={2}
         onClick={editMode ? () => onClickMatch(match, local ? "local" : "visit") : undefined}
       >
@@ -86,7 +86,7 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
         )}
 
         <Tooltip
-          title={getShortestNameClubInscription(club?.clubInscription) || vacancy?.name}
+          title={getShortestNameClubInscription(club?.clubInscription, 200) || vacancy?.name}
           getPopupContainer={() => document.body}
           mouseEnterDelay={0.5}
           placement="top"
