@@ -108,7 +108,7 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
         <Flex
           direction="row"
           alignItems="center"
-          className=" flex-1 max-w-[80%]  text-white  transition-all duration-400 "
+          className="flex-1 max-w-[80%] text-white transition-all duration-400"
           gap={2}
         >
           {fixtureMatch.clubHome?.clubInscription?.logo ? (
@@ -131,11 +131,11 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
 
 
           <Tooltip
-            title={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription, 200) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
+            title={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
             getPopupContainer={() => document.body}
             mouseEnterDelay={0.5}
             placement="top"
-            styles={{ root: { zIndex: 9999 } }}
+            overlayStyle={{ zIndex: 9999 }}
           >
             <Text
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
@@ -146,11 +146,12 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
           </Tooltip>
         </Flex>
         <div
-          className="  text-white  transition-all duration-400 w-[20px] flex justify-center gap-[2px] align-middle"
+          className="text-white transition-all duration-400 w-[20px] flex justify-center gap-[2px] items-center"
         >
-          <Text fontWeight="bold" height={6}>{tournamentMatch.scoreHome || 0}
-          </Text>
-          <span>{showPenalty ? (<span className="text-[10px]">({tournamentMatch.scoreHomePenalty || 0})</span>) : null}</span>
+          <Text fontWeight="bold" height={6}>{tournamentMatch.scoreHome || 0}</Text>
+          {showPenalty && (
+            <span className="text-[10px]">({tournamentMatch.scoreHomePenalty || 0})</span>
+          )}
         </div>
       </Flex>
       <Flex
@@ -162,7 +163,7 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
         <Flex
           direction="row"
           alignItems="center"
-          className=" flex-1 max-w-[80%]  text-white  transition-all duration-400 "
+          className="flex-1 max-w-[80%] text-white transition-all duration-400"
           gap={2}
         >
           {fixtureMatch.clubAway?.clubInscription?.logo ? (
@@ -184,11 +185,11 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
           )}
 
           <Tooltip
-            title={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription, 200) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
+            title={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
             getPopupContainer={() => document.body}
             mouseEnterDelay={0.5}
             placement="top"
-            styles={{ root: { zIndex: 9999 } }}
+            overlayStyle={{ zIndex: 9999 }}
           >
             <Text
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
@@ -199,12 +200,12 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
           </Tooltip>
         </Flex>
         <div
-          className="  text-white  transition-all duration-400 w-[20px] flex justify-center gap-[2px] align-middle"
+          className="text-white transition-all duration-400 w-[20px] flex justify-center gap-[2px] items-center"
         >
           <Text fontWeight="bold" height={6}>{tournamentMatch.scoreAway || 0}</Text>
-
-          <span>{showPenalty ? (<span className="text-[10px]">({tournamentMatch.scoreAwayPenalty || 0})</span>) : null}</span>
-
+          {showPenalty && (
+            <span className="text-[10px]">({tournamentMatch.scoreAwayPenalty || 0})</span>
+          )}
         </div>
       </Flex>
     </Flex >

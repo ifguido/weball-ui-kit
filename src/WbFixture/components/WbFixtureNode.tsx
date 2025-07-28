@@ -22,6 +22,7 @@ interface WbFixtureNodeProps {
   editMode?: boolean;
 }
 
+// eslint-disable-next-line react/display-name
 export const WbFixtureNode = React.forwardRef<
   HTMLDivElement,
   WbFixtureNodeProps
