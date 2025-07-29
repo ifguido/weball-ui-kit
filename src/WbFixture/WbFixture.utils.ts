@@ -112,7 +112,7 @@ export function getOrderedMatchesByParentChildrenCount(
 
 export function getShortestNameClubInscription(
     clubInscription: ClubInscription | undefined,
-    slice: number = 10
+    slice: number = 11
 ) {
     return (
         clubInscription?.tableName ||
@@ -126,7 +126,7 @@ export function getShortestNameClubInscription(
 
 export function getShortestNameClub(
     clubInscription: ClubInscription | undefined,
-    slice: number = 10
+    slice: number = 11
 ) {
     return (
         clubInscription?.tableName ||
