@@ -2,7 +2,7 @@ import { Tooltip } from "antd";
 import { Flex, Text, Image } from "../../components";
 import { FIXTURE_NODE_HEIGHT, FIXTURE_NODE_WIDTH } from "../constants/fixture-measures.constants";
 import { type FixtureVisualizerMatch, type TournamentMatch } from "../models/types";
-import { getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";
+import { getShortestNameClub, getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";
 
 /**
  * Props interface for WbFixtureResult component
@@ -82,7 +82,8 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
   } = props;
 
 
-  const showPenalty = tournamentMatch.scoreHomePenalty !== undefined || tournamentMatch.scoreAwayPenalty !== undefined;
+  const showPenalty = (tournamentMatch.scoreHomePenalty !== undefined && tournamentMatch.scoreHomePenalty !== null) ||
+    (tournamentMatch.scoreAwayPenalty !== undefined && tournamentMatch.scoreAwayPenalty !== null);
 
   if (!tournamentMatch) return null;
 
@@ -141,17 +142,19 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
               fontWeight="bold"
             >
-              {getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
+              {getShortestNameClub(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
             </Text>
           </Tooltip>
         </Flex>
         <div
-          className="text-white transition-all duration-400 w-[20px] flex justify-center gap-[2px] items-center"
+          className="text-white transition-all duration-400 min-w-[40px] flex flex-col items-center justify-center"
         >
-          <Text fontWeight="bold" height={6}>{tournamentMatch.scoreHome || 0}</Text>
-          {showPenalty && (
-            <span className="text-[10px]">({tournamentMatch.scoreHomePenalty || 0})</span>
-          )}
+          <div className="flex items-center gap-1">
+            <Text fontWeight="bold" height={6}>{tournamentMatch.scoreHome || 0}</Text>
+            <Text fontSize="10px" className="text-gray-300">
+              ({tournamentMatch.scoreHomePenalty ?? 0})
+            </Text>
+          </div>
         </div>
       </Flex>
       <Flex
@@ -200,12 +203,14 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
           </Tooltip>
         </Flex>
         <div
-          className="text-white transition-all duration-400 w-[20px] flex justify-center gap-[2px] items-center"
+          className="text-white transition-all duration-400 min-w-[40px] flex flex-col items-center justify-center"
         >
-          <Text fontWeight="bold" height={6}>{tournamentMatch.scoreAway || 0}</Text>
-          {showPenalty && (
-            <span className="text-[10px]">({tournamentMatch.scoreAwayPenalty || 0})</span>
-          )}
+          <div className="flex items-center gap-1">
+            <Text fontWeight="bold" height={6}>{tournamentMatch.scoreAway || 0}</Text>
+            <Text fontSize="10px" className="text-gray-300">
+              ({tournamentMatch.scoreAwayPenalty ?? 0})
+            </Text>
+          </div>
         </div>
       </Flex>
     </Flex >

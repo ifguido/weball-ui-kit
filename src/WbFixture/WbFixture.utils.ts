@@ -123,3 +123,17 @@ export function getShortestNameClubInscription(
         ""
     ).slice(0, slice)
 }
+
+export function getShortestNameClub(
+    clubInscription: ClubInscription | undefined,
+    slice: number = 10
+) {
+    return (
+        clubInscription?.tableName ||
+        clubInscription?.club?.tableShortName ||
+        clubInscription?.club?.tableName ||
+        clubInscription?.club?.name ||
+        clubInscription?.name ||
+        ""
+    ).slice(0, slice)
+}
