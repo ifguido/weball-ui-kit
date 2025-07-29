@@ -1,7 +1,7 @@
 import { Flex, Text, Image } from "../../components";
 import { type WBFixtureNode } from "../models/FixtureNode.interface";
 import { useMemo } from "react";
-import { getShortestNameClub, getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";
+import { getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";
 import { Tooltip } from "antd";
 
 interface WbFixtureNodeTeamProps {
@@ -87,16 +87,17 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
 
         <Tooltip
           title={getShortestNameClubInscription(club?.clubInscription) || vacancy?.name}
-          getPopupContainer={() => document.body}
-          mouseEnterDelay={0.5}
-          placement="top"
-          overlayStyle={{ zIndex: 9999 }}
+          mouseEnterDelay={0.1}
+          mouseLeaveDelay={0.1}
+          placement="topLeft"
+          trigger="hover"
+          overlayClassName="custom-tooltip"
         >
           <Text
             className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
             fontWeight="bold"
           >
-            {getShortestNameClub(club?.clubInscription) || vacancy?.name || ""}
+            {getShortestNameClubInscription(club?.clubInscription) || vacancy?.name || ""}
           </Text>
         </Tooltip>
       </Flex>

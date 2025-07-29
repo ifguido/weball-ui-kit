@@ -2,7 +2,7 @@ import { Tooltip } from "antd";
 import { Flex, Text, Image } from "../../components";
 import { FIXTURE_NODE_HEIGHT, FIXTURE_NODE_WIDTH } from "../constants/fixture-measures.constants";
 import { type FixtureVisualizerMatch, type TournamentMatch } from "../models/types";
-import { getShortestNameClub, getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";
+import { getShortestNameClubInscription, SRC_IMG } from "../WbFixture.utils";
 
 /**
  * Props interface for WbFixtureResult component
@@ -85,6 +85,11 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
   const showPenalty = (tournamentMatch.scoreHomePenalty !== undefined && tournamentMatch.scoreHomePenalty !== null) ||
     (tournamentMatch.scoreAwayPenalty !== undefined && tournamentMatch.scoreAwayPenalty !== null);
 
+
+  console.log("WbFixtureResult tournamentMatch", tournamentMatch);
+  console.log("WbFixtureResult fixtureMatch", fixtureMatch);
+  console.log(showPenalty, "showPenalty");
+
   if (!tournamentMatch) return null;
 
 
@@ -133,16 +138,16 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
 
           <Tooltip
             title={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
-            getPopupContainer={() => document.body}
-            mouseEnterDelay={0.5}
-            placement="top"
-            overlayStyle={{ zIndex: 9999 }}
+            mouseEnterDelay={0.1}
+            mouseLeaveDelay={0.1}
+            placement="topLeft"
+            trigger="hover"
           >
             <Text
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
               fontWeight="bold"
             >
-              {getShortestNameClub(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
+              {getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
             </Text>
           </Tooltip>
         </Flex>
@@ -151,9 +156,11 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
         >
           <div className="flex items-center gap-1">
             <Text fontWeight="bold" height={6}>{tournamentMatch.scoreHome || 0}</Text>
-            <Text fontSize="10px" className="text-gray-300">
-              ({tournamentMatch.scoreHomePenalty ?? 0})
-            </Text>
+            {(tournamentMatch.scoreHomePenalty !== undefined && tournamentMatch.scoreHomePenalty !== null) && (
+              <Text fontSize="10px" className="text-gray-300">
+                ({tournamentMatch.scoreHomePenalty})
+              </Text>
+            )}
           </div>
         </div>
       </Flex>
@@ -189,10 +196,10 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
 
           <Tooltip
             title={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
-            getPopupContainer={() => document.body}
-            mouseEnterDelay={0.5}
-            placement="top"
-            overlayStyle={{ zIndex: 9999 }}
+            mouseEnterDelay={0.1}
+            mouseLeaveDelay={0.1}
+            placement="topLeft"
+            trigger="hover"
           >
             <Text
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
@@ -207,9 +214,11 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
         >
           <div className="flex items-center gap-1">
             <Text fontWeight="bold" height={6}>{tournamentMatch.scoreAway || 0}</Text>
-            <Text fontSize="10px" className="text-gray-300">
-              ({tournamentMatch.scoreAwayPenalty ?? 0})
-            </Text>
+            {(tournamentMatch.scoreAwayPenalty !== undefined && tournamentMatch.scoreAwayPenalty !== null) && (
+              <Text fontSize="10px" className="text-gray-300">
+                ({tournamentMatch.scoreAwayPenalty})
+              </Text>
+            )}
           </div>
         </div>
       </Flex>
