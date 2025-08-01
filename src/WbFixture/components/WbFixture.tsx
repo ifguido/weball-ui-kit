@@ -101,6 +101,8 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
   const [rootStageNumberToShow, setRootStageNumberToShow] = useState<number>(0);
   // Cantidad de textos de etapas que dibujaremos
   const [stagesTextQuantity, setStagesTextQuantity] = useState<number>(0);
+  // Campeón detectado automáticamente cuando cupWinner no está presente
+  const [detectedWinner, setDetectedWinner] = useState<any>(null);
 
   // Referencia al contenedor principal
   const containerRef = useRef<HTMLDivElement>(null);
@@ -122,6 +124,74 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
   const scaleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastCalculatedScale = useRef<number>(1);
   const resizeObserverRef = useRef<ResizeObserver | null>(null);
+
+  // ------------------------------------------------------
+  // Función para detectar al campeón automáticamente
+  // ------------------------------------------------------
+  const detectChampion = (matches: WBFixtureNode[]) => {
+    if (!matches || matches.length === 0) return null;
+    let winner = null;
+
+    // Buscar la final (partido con stageNumberFromFinal === 1)
+    const finalMatchVisualizer = matches.find(match => match.stageNumberFromFinal === 1);
+
+    if (!finalMatchVisualizer) return null;
+
+    const hasMoreThantOneMatch = finalMatchVisualizer.tournamentMatches && finalMatchVisualizer.tournamentMatches.length > 1;
+
+    if (hasMoreThantOneMatch) {
+      winner = finalMatchVisualizer.clubWon
+    }
+    else {
+      const finalMatch = finalMatchVisualizer.tournamentMatches?.[0];
+
+      // Aplicar la misma lógica de determinación del ganador
+      if (finalMatch.scoreHome > finalMatch.scoreAway) {
+        winner = finalMatchVisualizer.clubHome;
+      } else if (finalMatch.scoreHome < finalMatch.scoreAway) {
+        winner = finalMatchVisualizer.clubAway;
+      } else {
+        // Empate en tiempo regular, revisar penalties
+        if (!finalMatch.scoreHomePenalty && !finalMatch.scoreAwayPenalty) {
+          // Sin penalties, no hay ganador definido
+          return null;
+        } else {
+          if (finalMatch.scoreHomePenalty > finalMatch.scoreAwayPenalty) {
+            winner = finalMatchVisualizer.clubHome;
+          } else if (finalMatch.scoreHomePenalty < finalMatch.scoreAwayPenalty) {
+            winner = finalMatchVisualizer.clubAway;
+          } else {
+            // Empate en penalties también, no hay ganador definido
+            return null;
+          }
+        }
+      }
+    }
+
+    // Retornar el ganador en el formato esperado por cupWinner
+    if (winner?.clubInscription) {
+      return {
+        id: winner.id,
+        name: winner.clubInscription?.club?.name || winner.clubInscription.name,
+        logo: winner.clubInscription.logo || winner.clubInscription.club?.logo,
+        color: winner.clubInscription.color
+      };
+    }
+
+    return null;
+  };
+
+  // ------------------------------------------------------
+  // useEffect: detectar campeón cuando cambian los matches
+  // ------------------------------------------------------
+  useEffect(() => {
+    if (!cupWinner && matches.length > 0) {
+      const champion = detectChampion(matches);
+      setDetectedWinner(champion);
+    } else {
+      setDetectedWinner(null);
+    }
+  }, [matches, cupWinner]);
 
   // ------------------------------------------------------
   // useEffect: cuando cambia el fixtureVisualizerRoot
@@ -179,6 +249,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
     // Mapeamos los FixtureVisualizerMatch -> FixtureNode
     // (para que WbFixtureNode los reciba con la misma estructura esperada)
     setMatches(orderedMatches);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fixtureVisualizerRoot]);
 
   // ------------------------------------------------------
@@ -559,15 +630,16 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
           <WbAvatar
             borderColor={WbColors.light.inputBorder}
             size={FIXTURE_WINNER_HEIGHT + "px"}
-            src={cupWinner?.logo || SRC_IMG}
+            src={(cupWinner || detectedWinner)?.logo || SRC_IMG}
             new
           />
           <Box>
             <Text fontWeight="bold">Campeón</Text>
             <Text style={{
-              textWrap: "nowrap"
+              textWrap: "nowrap",
+              maxWidth: 100,
             }} fontSize="12px" color={WbColors.light.grey}>
-              {cupWinner?.name || "Aún no definido."}
+              {(cupWinner || detectedWinner)?.name || "Aún no definido."}
             </Text>
           </Box>
         </Flex>

@@ -84,12 +84,6 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
 
   const showPenalty = (tournamentMatch.scoreHomePenalty !== undefined && tournamentMatch.scoreHomePenalty !== null) ||
     (tournamentMatch.scoreAwayPenalty !== undefined && tournamentMatch.scoreAwayPenalty !== null);
-
-
-  console.log("WbFixtureResult tournamentMatch", tournamentMatch);
-  console.log("WbFixtureResult fixtureMatch", fixtureMatch);
-  console.log(showPenalty, "showPenalty");
-
   if (!tournamentMatch) return null;
 
 

@@ -136,11 +136,13 @@ export type TournamentCategory<T = {}, U = {}> = WeballBaseEntity & {
 /**
  * Generic tournament match type that accepts any object extending minimum requirements
  */
-export type TournamentMatch<T = {}, U = {}, V = {}, W = {}> = WeballBaseEntity & {
+export type TournamentMatch<T = {}, U = {}, V = {}, W = {}, X = {}, Y = {}> = WeballBaseEntity & {
     scoreHome: number;
     scoreAway: number;
     scoreHomePenalty?: number;
     scoreAwayPenalty?: number;
+    clubHome: TournamentClub<X> | null;
+    clubAway: TournamentClub<Y> | null;
     category: TournamentCategory<U, V>;
     matchInfo: TournamentMatchInfo<W>;
 } & T;

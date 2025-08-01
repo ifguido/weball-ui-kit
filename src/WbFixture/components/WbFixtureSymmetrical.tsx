@@ -42,6 +42,8 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
   const [startRootNodes, setStartRootNodes] = useState<number>(0);
   const [rootStageNumberToShow, setRootStageNumberToShow] = useState<number>(0);
   const [stagesTextQuantity, setStagesTextQuantity] = useState<number>(0);
+  // Campeón detectado automáticamente cuando cupWinner no está presente
+  const [detectedWinner, setDetectedWinner] = useState<any>(null);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const refNodes = useRef<HTMLDivElement[]>([]);
@@ -65,6 +67,74 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
   const stagesOnWing = fixtureVisualizerRoot?.children.length
     ? fixtureVisualizerRoot?.children.length - 1
     : 0;
+
+  // ------------------------------------------------------
+  // Función para detectar al campeón automáticamente
+  // ------------------------------------------------------
+  const detectChampion = (matches: WBFixtureNode[]) => {
+    if (!matches || matches.length === 0) return null;
+    let winner = null;
+
+    // Buscar la final (partido con stageNumberFromFinal === 1)
+    const finalMatchVisualizer = matches.find(match => match.stageNumberFromFinal === 1);
+
+    if (!finalMatchVisualizer) return null;
+
+    const hasMoreThantOneMatch = finalMatchVisualizer.tournamentMatches && finalMatchVisualizer.tournamentMatches.length > 1;
+
+    if (hasMoreThantOneMatch) {
+      winner = finalMatchVisualizer.clubWon
+    }
+    else {
+      const finalMatch = finalMatchVisualizer.tournamentMatches?.[0];
+
+      // Aplicar la misma lógica de determinación del ganador
+      if (finalMatch.scoreHome > finalMatch.scoreAway) {
+        winner = finalMatchVisualizer.clubHome;
+      } else if (finalMatch.scoreHome < finalMatch.scoreAway) {
+        winner = finalMatchVisualizer.clubAway;
+      } else {
+        // Empate en tiempo regular, revisar penalties
+        if (!finalMatch.scoreHomePenalty && !finalMatch.scoreAwayPenalty) {
+          // Sin penalties, no hay ganador definido
+          return null;
+        } else {
+          if (finalMatch.scoreHomePenalty > finalMatch.scoreAwayPenalty) {
+            winner = finalMatchVisualizer.clubHome;
+          } else if (finalMatch.scoreHomePenalty < finalMatch.scoreAwayPenalty) {
+            winner = finalMatchVisualizer.clubAway;
+          } else {
+            // Empate en penalties también, no hay ganador definido
+            return null;
+          }
+        }
+      }
+    }
+
+    // Retornar el ganador en el formato esperado por cupWinner
+    if (winner?.clubInscription) {
+      return {
+        id: winner.id,
+        name: winner.clubInscription?.club?.name || winner.clubInscription.name,
+        logo: winner.clubInscription.logo || winner.clubInscription.club?.logo,
+        color: winner.clubInscription.color
+      };
+    }
+
+    return null;
+  };
+
+  // ------------------------------------------------------
+  // useEffect: detectar campeón cuando cambian los nodes
+  // ------------------------------------------------------
+  useEffect(() => {
+    if (!cupWinner && nodes.length > 0) {
+      const champion = detectChampion(nodes);
+      setDetectedWinner(champion);
+    } else {
+      setDetectedWinner(null);
+    }
+  }, [nodes, cupWinner]);
 
   useEffect(() => {
     if (!fixtureVisualizerRoot) return;
@@ -152,6 +222,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
     const auxLinesQuantity = 2 * (2 ** (stagesOnWing - 1) - 1);
     setLinesQuantity(auxLinesQuantity);
     setNodes(sorted);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fixtureVisualizerRoot, stagesOnWing]);
 
   // ------------------------------------------------------
@@ -484,6 +555,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
         refWinner.current.style.left = finalNodeLeft + "px";
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refNodes.current, nodes]);
 
   if (!fixtureVisualizerRoot || !nodes.length) return;
@@ -636,14 +708,15 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
         >
           <WbAvatar
             borderColor={WbColors.light.inputBorder}
-            size={`${FIXTURE_WINNER_HEIGHT}px`}
-            src={cupWinner?.logo || SRC_IMG}
+            size={FIXTURE_WINNER_HEIGHT + 30 + "px"}
+            src={(cupWinner || detectedWinner)?.logo || SRC_IMG}
+            padding={0}
             new
           />
           <Box>
             <Text fontWeight="bold">Campeón</Text>
             <Text style={{ fontSize: 12, color: WbColors.light.grey, textWrap: "nowrap" }}>
-              {cupWinner?.name || "Aún no definido."}
+              {(cupWinner || detectedWinner)?.name || "Aún no definido."}
             </Text>
           </Box>
         </Flex>

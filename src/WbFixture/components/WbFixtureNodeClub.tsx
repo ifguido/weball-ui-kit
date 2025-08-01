@@ -28,18 +28,20 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
 
 
 
-  const { clubScore } = useMemo(() => {
+  const { clubScore, clubPenaltyScore } = useMemo(() => {
     if (!match) return {};
 
     const hasOnlyOneMAtch = match?.tournamentMatches?.length === 1;
     if (hasOnlyOneMAtch) {
       return {
-        clubScore: local ? match?.tournamentMatches?.[0].scoreHome : match?.tournamentMatches?.[0].scoreAway
+        clubScore: local ? match?.tournamentMatches?.[0].scoreHome : match?.tournamentMatches?.[0].scoreAway,
+        clubPenaltyScore: local ? match?.tournamentMatches?.[0].scoreHomePenalty : match?.tournamentMatches?.[0].scoreAwayPenalty
       }
     }
 
     return {
-      clubScore: local ? match?.valueScoreHome : match.valueScoreAway
+      clubScore: local ? match?.valueScoreHome : match.valueScoreAway,
+      clubPenaltyScore: local ? match?.valueScoreHomePenalty : match?.valueScoreAwayPenalty
     };
   }, [match, local])
 
@@ -102,11 +104,18 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
         </Tooltip>
       </Flex>
       <div
-        className={`transition-all duration-400 w-[20px] flex justify-center ${editMode ? "hover:bg-gray-300 cursor-pointer" : "cursor-default"
+        className={`transition-all duration-400 min-w-[40px] flex flex-col items-center justify-center ${editMode ? "hover:bg-gray-300 cursor-pointer" : "cursor-default"
           }`}
         onClick={editMode ? () => onClickMatch(match, local ? "resultLocal" : "resultVisit") : undefined}
       >
-        <Text fontWeight="bold" height={6}>{clubScore}</Text>
+        <div className="flex items-center gap-1">
+          <Text fontWeight="bold" height={6}>{clubScore}</Text>
+          {(clubPenaltyScore !== undefined && clubPenaltyScore !== null) && (
+            <Text fontSize="10px" className="text-gray-500">
+              ({clubPenaltyScore})
+            </Text>
+          )}
+        </div>
       </div>
     </Flex>
   );
