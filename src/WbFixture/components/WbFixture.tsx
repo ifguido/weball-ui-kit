@@ -35,7 +35,7 @@ const KEY_PREFIX = {
 // ======================================================
 
 /**
- * WbFixture component - displays tournament bracket/fixture visualization
+ * WbFixture component - displays tournament bracket/fixture visualization.
  * 
  * @template TFixtureData - Type for fixture visualizer data (can contain any additional properties)  
  * @template TCupWinnerData - Type for cup winner data (can contain any additional properties)
