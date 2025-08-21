@@ -34,6 +34,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
     onResultSaved,
     editMode = false,
     responsive = true,
+    loadTournamentMatches,
     ...restProps
   } = props;
 
@@ -606,7 +607,7 @@ export const WbFixtureSymmetrical = (props: WbFixtureProps) => {
             backgroundColor={WbColors.light.backgroundGrey}
 
           >
-            <WbFixtureNode match={node} onClickMatch={onClickNode ?? (() => { })} onResultSaved={onResultSaved ?? (() => { })} editMode={editMode} />
+            <WbFixtureNode match={node} onClickMatch={onClickNode ?? (() => { })} onResultSaved={onResultSaved ?? (() => { })} editMode={editMode} loadTournamentMatches={loadTournamentMatches} />
           </Box>
         ))}
 

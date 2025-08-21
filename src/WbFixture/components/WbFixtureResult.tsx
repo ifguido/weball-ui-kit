@@ -77,8 +77,7 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
   props: WbFixtureNodeTeamProps<TournamentMatchData, FixtureMatchData>
 ) => {
   const {
-    tournamentMatch,
-    fixtureMatch
+    tournamentMatch
   } = props;
 
 
@@ -111,10 +110,10 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
           className="flex-1 max-w-[80%] text-white transition-all duration-400"
           gap={2}
         >
-          {fixtureMatch.clubHome?.clubInscription?.logo ? (
+          {tournamentMatch.clubHome?.clubInscription?.logo ? (
             <>
               <Image
-                src={fixtureMatch.clubHome?.clubInscription?.logo || SRC_IMG}
+                src={tournamentMatch.clubHome?.clubInscription?.logo || SRC_IMG}
                 width={"20px"}
                 height={"20px"}
               />
@@ -124,14 +123,14 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
               className="block h-4 aspect-square rounded-md"
               style={{
                 backgroundColor:
-                  fixtureMatch.clubHome?.clubInscription?.color || tournamentMatch.matchInfo.vacancyHome?.color,
+                  tournamentMatch.clubHome?.clubInscription?.color || tournamentMatch.matchInfo.vacancyHome?.color,
               }}
             />
           )}
 
 
           <Tooltip
-            title={getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
+            title={getShortestNameClubInscription(tournamentMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="topLeft"
@@ -141,7 +140,7 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
               fontWeight="bold"
             >
-              {getShortestNameClubInscription(fixtureMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
+              {getShortestNameClubInscription(tournamentMatch?.clubHome?.clubInscription) || tournamentMatch.matchInfo.vacancyHome?.name || ""}
             </Text>
           </Tooltip>
         </Flex>
@@ -170,10 +169,10 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
           className="flex-1 max-w-[80%] text-white transition-all duration-400"
           gap={2}
         >
-          {fixtureMatch.clubAway?.clubInscription?.logo ? (
+          {tournamentMatch.clubAway?.clubInscription?.logo ? (
             <>
               <Image
-                src={fixtureMatch.clubAway?.clubInscription?.logo || SRC_IMG}
+                src={tournamentMatch.clubAway?.clubInscription?.logo || SRC_IMG}
                 width={"20px"}
                 height={"20px"}
               />
@@ -183,13 +182,13 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
               className="block h-4 aspect-square rounded-md"
               style={{
                 backgroundColor:
-                  fixtureMatch.clubAway?.clubInscription?.color || tournamentMatch.matchInfo.vacancyAway?.color,
+                  tournamentMatch.clubAway?.clubInscription?.color || tournamentMatch.matchInfo.vacancyAway?.color,
               }}
             />
           )}
 
           <Tooltip
-            title={getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
+            title={getShortestNameClubInscription(tournamentMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
             mouseEnterDelay={0.1}
             mouseLeaveDelay={0.1}
             placement="topLeft"
@@ -199,7 +198,7 @@ export const WbFixtureResult = <TournamentMatchData = any, FixtureMatchData = an
               className="text-[10px] whitespace-nowrap overflow-hidden text-ellipsis "
               fontWeight="bold"
             >
-              {getShortestNameClubInscription(fixtureMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
+              {getShortestNameClubInscription(tournamentMatch.clubAway?.clubInscription) || tournamentMatch.matchInfo.vacancyAway?.name || ""}
             </Text>
           </Tooltip>
         </Flex>

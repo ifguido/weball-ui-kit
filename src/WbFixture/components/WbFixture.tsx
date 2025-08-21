@@ -91,6 +91,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
     onResultSaved,
     editMode = false,
     responsive = true,
+    loadTournamentMatches,
     ...restProps
   } = props;
   // Estado con la lista final de nodos a renderizar (partidos)
@@ -538,6 +539,7 @@ export const WbFixture = <TFixtureData = any, TCupWinnerData = any>(
               onClickMatch={onClickNode ?? (() => { })}
               onResultSaved={onResultSaved ?? (() => { })}
               editMode={editMode}
+              loadTournamentMatches={loadTournamentMatches}
             />
           </Box>
         ))}
