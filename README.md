@@ -412,7 +412,6 @@ Esta librería requiere las siguientes dependencias en tu proyecto:
   "react": ">=18.0.0",
   "@emotion/react": ">=11.0.0",
   "@emotion/styled": ">=11.0.0",
-  "framer-motion": ">=6.0.0",
   "antd": ">=5.0.0"
 }
 ```
