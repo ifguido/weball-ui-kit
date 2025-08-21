@@ -1,4 +1,4 @@
-import type { FixtureVisualizer, MinClubInscription, WeballBaseEntity } from "./types";
+import type { FixtureVisualizer, MinClubInscription, TournamentMatch, WeballBaseEntity } from "./types";
 
 /**
  * Minimum required properties for a cup winner
@@ -91,6 +91,13 @@ export interface WbFixtureProps<
    * ```
    */
   fixtureVisualizerRoot?: FixtureVisualizer<TFixtureData>;
+
+  /**
+   * Function to fetch fixtureVisualizerMatch tournamentMatches
+   * @param fixtureVisualizerMatchId 
+   * @returns 
+   */
+  loadTournamentMatches?: (fixtureVisualizerMatchId: number) => Promise<TournamentMatch[]>;
 
   /**
    * Currently selected fixture visualizer node
