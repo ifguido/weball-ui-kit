@@ -108,7 +108,7 @@ export const WbFixtureNodeClub = (props: WbFixtureNodeTeamProps) => {
         onClick={editMode ? () => onClickMatch(match, local ? "resultLocal" : "resultVisit") : undefined}
       >
         <div className="flex items-center gap-1">
-          <Text fontWeight="bold" height={6} width={"14px"}>{clubScore}</Text>
+          <Text fontWeight="bold" height={6} width={"24px"} textAlign="center">{clubScore}</Text>
           {(clubPenaltyScore !== undefined && clubPenaltyScore !== null) && (
             <Text fontSize="10px" className="text-gray-500">
               ({clubPenaltyScore})
