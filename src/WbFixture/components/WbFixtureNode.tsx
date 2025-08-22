@@ -40,21 +40,22 @@ export const WbFixtureNode = React.forwardRef<
   const [inputScore, setInputScore] = useState<number | null>(null);
 
   const loadAndShowDetails = async () => {
-    if (tournamentMatches.length > 0) {
+    if (match.tournamentMatches?.length <= 1) return;
+
+    if (tournamentMatches.length > 1) {
       setShowDetails(true);
       return;
     }
     
     if (!loadTournamentMatches || !match?.id) {
-        setShowDetails(true);
-        return;
+      return;
     }
 
+    setShowDetails(true);
     setIsLoading(true);
     try {
       const matches = await loadTournamentMatches(match.id);
       setTournamentMatches(matches);
-      setShowDetails(true);
     } catch (error) {
       console.error("Error al cargar los partidos del torneo:", error);
     } finally {

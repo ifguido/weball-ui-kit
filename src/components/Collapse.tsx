@@ -19,11 +19,17 @@ export const Collapse: React.FC<CollapseProps> = ({
     const [height, setHeight] = useState<number | 'auto'>(isOpen ? 'auto' : 0);
 
     useEffect(() => {
-        if (contentRef.current) {
-            const contentHeight = contentRef.current.scrollHeight;
-            setHeight(isOpen ? contentHeight : 0);
-        }
-    }, [isOpen]);
+  if (contentRef.current) {
+    const contentHeight = contentRef.current.scrollHeight;
+    if (isOpen) {
+      setHeight(contentHeight);
+      const id = setTimeout(() => setHeight('auto'), 300);
+      return () => clearTimeout(id);
+    } else {
+      setHeight(0);
+    }
+  }
+}, [isOpen, children]);
 
     const computedStyle: React.CSSProperties = {
         ...style,
